@@ -1,6 +1,6 @@
 ---
 title: "Lecture 1: Describing Data"
-author: "Nick Huntington-Klein"
+author: "Andreas Steinmayr"
 date: "`r Sys.Date()`"
 output:   
   revealjs::revealjs_presentation:
