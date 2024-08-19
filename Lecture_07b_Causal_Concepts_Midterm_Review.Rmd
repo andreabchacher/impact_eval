@@ -1,0 +1,230 @@
+---
+output:
+  slidy_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(purrr)
+library(patchwork)
+library(ggpubr)
+library(dagitty)
+library(ggdag)
+library(gganimate)
+library(ggthemes)
+library(ggpubr)
+library(modelsummary)
+library(Cairo)
+
+# Set up the footer content
+footer_text <- paste("Lecture 7b: Causal Concepts Midterm Review -",
+                     "Course Title:  -",
+                     Sys.Date())
+
+```
+
+#####################################
+<style>
+/* Define colors */
+:root {
+  --uibk-orange: rgb(243, 146, 0);
+  --uibk-blue: rgb(0, 51, 97);
+  --black: rgb(0, 0, 0);
+  --white: rgb(255, 255, 255);
+  --light-blue-grey: rgb(239, 238, 225);
+}
+
+/* Container to position the logo and the header */
+.header-container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Full-width header image */
+.header-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Positioning the logo */
+.logo {
+  margin-bottom: 10px;
+  height: 60px;
+  background: white;
+  padding: 5px;
+}
+
+/* Title positioning */
+.title-container {
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Custom styles for colors and items */
+.title-page-header {
+  background-color: var(--uibk-blue);
+  color: var(--white);
+}
+
+.final-slide {
+  background-color: var(--uibk-blue);
+  color: var(--white);
+}
+
+.institute, .author, .date {
+  color: var(--black);
+}
+
+.block-title, .block-title-example {
+  background-color: var(--uibk-blue);
+  color: var(--white);
+}
+
+.block-body, .block-body-example {
+  background-color: var(--light-blue-grey);
+}
+
+.section-in-toc, .section-page {
+  color: var(--black);
+}
+
+.subsection {
+  color: var(--white);
+}
+
+.title-page-footer {
+  background-color: var(--uibk-orange);
+  color: var(--white);
+}
+
+/* Custom footer styles */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  background-color: var(--uibk-blue);
+  color: var(--white);
+  padding: 10px 0;
+}
+
+/* Centering slide content */
+.reveal .slides > section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.reveal .slides > section > * {
+  max-width: 80%;
+  margin: auto;
+}
+
+/* Code chunk styling */
+pre, code {
+  background-color: #f8f8f8; /* Light gray background */
+  border: none; /* Remove the default border */
+  padding: 0; /* Remove padding inside the individual code elements */
+  margin: 0; /* Remove margin around the individual code elements */
+}
+
+/* Styling for the whole code-output block */
+pre.chunk {
+  background-color: #f8f8f8; /* Light gray background for the whole block */
+  border: 1px solid #dcdcdc; /* Single light border around the whole block */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside the whole block */
+  overflow-x: auto; /* Horizontal scrolling for long lines */
+  font-size: 0.9em; /* Slightly smaller font size */
+  line-height: 1.5em; /* Line height for better readability */
+  max-width: 80%; /* Ensures the block doesn't stretch too wide */
+  margin: 10px auto; /* Centering the block */
+}
+
+</style>
+<!-- First Slide with University Logo and Header Image -->
+<div class="header-container">
+  <img src="universitaet-innsbruck-logo-cmyk-farbe.jpg" class="logo">
+  <img src="uibk_header1.png" class="header-image">
+</div>
+<div class="title-container">
+  <h1>Lecture 7b: Causal Concepts Midterm Review </h1>
+</div>
+<div class="footer">Lecture 7b: Causal Concepts Midterm Review - Course Title:  - `r Sys.Date()`</div>
+
+#####################################
+
+## Exam Review
+
+- Just some reminders of stuff we have covered
+
+## Describing Variables
+
+- Continuous and Discrete Distributions
+- Summary statistics - mean, percentiles, skew
+- Theoretical distributions and our attempts to learn about them from data
+- Sampling variation messing up our ability to do so
+
+## Describing Relationships
+
+- Conditional means
+- Explaining one variable with another
+- Conditional distributions, contrasting distributions, scatterplots
+- Local means, fitting shapes with regressions, adding controls for conditional conditional means
+- Interaction terms
+
+## Identification
+
+- We are isolating the variation we are interested in
+- That's the "good variation"
+- Bad variation can get in the way
+- We need a model of how the world works to figure out what the bad variation is so we can sweep it out
+
+## Causal Diagrams
+
+1. Consider all the variables that are likely to be important in the data generating process (this includes variables you can't observe)
+2. For simplicity, combine them together or prune the ones least likely to be important
+3. Consider which variables are likely to affect which other variables and draw arrows from one to the other
+4. (Bonus: Test some implications of the model to see if you have the right one)
+
+## Causal Diagrams
+
+Identifying `X -> Y` by closing back doors:
+
+1. Find all the paths from `X` to `Y` on the diagram
+2. Determine which are "front doors" (start with `X ->`) and which are "back doors" (start with `X <-`)
+3. Determine which are already closed by colliders (`X -> C <- Y`)
+4. Then, identify the effect by finding which variables you need to control for to close all back doors (careful - don't close the front doors, or open back up paths with colliders!)
+
+## Controlling
+
+- One way to close back doors is by controlling
+- Control for `W` by seeing what `W` explains (perhaps with a regression) and taking it out
+
+```{r, echo=TRUE}
+library(Ecdat)
+data(BudgetFood)
+BudgetFood <- BudgetFood %>% mutate(totexp = totexp/1000000)
+m1 <- lm(wfood ~ totexp, data = BudgetFood)
+m2 <- lm(wfood_r ~ totexp_r, data = BudgetFood %>% mutate(wfood_r = resid(lm(wfood~age)),
+                                                          totexp_r = resid(lm(totexp~age))))
+m3 <- lm(wfood ~ totexp + age, data = BudgetFood)
+```
+
+## Controlling
+
+```{r, echo = FALSE}
+msummary(list(m1,m2,m3), stars = TRUE, gof_omit = 'AIC|BIC|Lik|Adj|F')
+```

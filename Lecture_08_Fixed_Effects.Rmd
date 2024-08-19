@@ -1,22 +1,14 @@
 ---
-title: "Lecture 8 Fixed Effects"
-author: "Nick Huntington-Klein"
-date: "`r Sys.Date()`"
-output:   
-  revealjs::revealjs_presentation:
-    theme: solarized
-    transition: slide
-    self_contained: true
-    smart: true
-    fig_caption: true
-    reveal_options:
-      slideNumber: true
-    
+output:
+  slidy_presentation: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tidyverse)
+library(purrr)
+library(patchwork)
+library(ggpubr)
 library(stringr)
 library(dagitty)
 library(ggdag)
@@ -26,9 +18,156 @@ library(Cairo)
 library(gapminder)
 library(modelsummary)
 library(fixest)
-library(ggpubr)
-theme_set(theme_gray(base_size = 15))
+
+# Set up the footer content
+footer_text <- paste("Lecture 8: Fixed Effects -",
+                     "Course Title:  -",
+                     Sys.Date())
+
 ```
+
+#####################################
+<style>
+/* Define colors */
+:root {
+  --uibk-orange: rgb(243, 146, 0);
+  --uibk-blue: rgb(0, 51, 97);
+  --black: rgb(0, 0, 0);
+  --white: rgb(255, 255, 255);
+  --light-blue-grey: rgb(239, 238, 225);
+}
+
+/* Container to position the logo and the header */
+.header-container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Full-width header image */
+.header-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Positioning the logo */
+.logo {
+  margin-bottom: 10px;
+  height: 60px;
+  background: white;
+  padding: 5px;
+}
+
+/* Title positioning */
+.title-container {
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Custom styles for colors and items */
+.title-page-header {
+  background-color: var(--uibk-blue);
+  color: var(--white);
+}
+
+.final-slide {
+  background-color: var(--uibk-blue);
+  color: var(--white);
+}
+
+.institute, .author, .date {
+  color: var(--black);
+}
+
+.block-title, .block-title-example {
+  background-color: var(--uibk-blue);
+  color: var(--white);
+}
+
+.block-body, .block-body-example {
+  background-color: var(--light-blue-grey);
+}
+
+.section-in-toc, .section-page {
+  color: var(--black);
+}
+
+.subsection {
+  color: var(--white);
+}
+
+.title-page-footer {
+  background-color: var(--uibk-orange);
+  color: var(--white);
+}
+
+/* Custom footer styles */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  background-color: var(--uibk-blue);
+  color: var(--white);
+  padding: 10px 0;
+}
+
+/* Centering slide content */
+.reveal .slides > section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.reveal .slides > section > * {
+  max-width: 80%;
+  margin: auto;
+}
+
+/* Code chunk styling */
+pre, code {
+  background-color: #f8f8f8; /* Light gray background */
+  border: none; /* Remove the default border */
+  padding: 0; /* Remove padding inside the individual code elements */
+  margin: 0; /* Remove margin around the individual code elements */
+}
+
+/* Styling for the whole code-output block */
+pre.chunk {
+  background-color: #f8f8f8; /* Light gray background for the whole block */
+  border: 1px solid #dcdcdc; /* Single light border around the whole block */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside the whole block */
+  overflow-x: auto; /* Horizontal scrolling for long lines */
+  font-size: 0.9em; /* Slightly smaller font size */
+  line-height: 1.5em; /* Line height for better readability */
+  max-width: 80%; /* Ensures the block doesn't stretch too wide */
+  margin: 10px auto; /* Centering the block */
+}
+
+</style>
+<!-- First Slide with University Logo and Header Image -->
+<div class="header-container">
+  <img src="universitaet-innsbruck-logo-cmyk-farbe.jpg" class="logo">
+  <img src="uibk_header1.png" class="header-image">
+</div>
+<div class="title-container">
+  <h1>Lecture 8: Fixed Effects </h1>
+</div>
+<div class="footer">Lecture 8: Fixed Effects - Course Title:  - `r Sys.Date()`</div>
+
+#####################################
+
 
 ## Recap
 
@@ -163,65 +302,51 @@ ggplot(gapminder)+geom_point(aes(x=log(gdpPercap)-lgdpmean,y=lifeExp-lemean,colo
 
 ## In Action
 
-```{r, dev='CairoPNG', echo=FALSE, fig.width=7, fig.height=5}
+```{r, echo=FALSE, fig.width=5, fig.height=4, out.width="50%", fig.align = "center"}
+library(tidyverse)
+library(gganimate)
+library(gifski)
+
+# Generate your data and plot
 df <- data.frame(Person = rep(1:4,50)) %>%
-  mutate(X = .5+.5*(Person-2.5) + rnorm(200)) %>%
-  mutate(Y = -.5*X + (Person-2.5) + 1 + rnorm(200),time="1") %>%
+  mutate(X = .5 + .5 * (Person - 2.5) + rnorm(200)) %>%
+  mutate(Y = -.5 * X + (Person - 2.5) + 1 + rnorm(200), time = "1") %>%
   group_by(Person) %>%
-  mutate(mean_X=mean(X),mean_Y=mean(Y)) %>%
+  mutate(mean_X = mean(X), mean_Y = mean(Y)) %>%
   ungroup()
 
-#Calculate correlations
-before_cor <- paste("1. Start with raw data. Correlation between X and Y: ",round(cor(df$X,df$Y),3),sep='')
-after_cor <- paste("6. Within-Individual Correlation Between X and Y: ",round(cor(df$X-df$mean_X,df$Y-df$mean_Y),3),sep='')
-
-#Add step 2 in which X is demeaned, and 3 in which both X and Y are, and 4 which just changes label
+# Add steps to create the full data frame for animation
 dffull <- rbind(
-  #Step 1: Raw data only
-  df %>% mutate(mean_X=NA,mean_Y=NA,time=before_cor),
-  #Step 2: Add x-lines
-  df %>% mutate(mean_Y=NA,time='2. Figure out between-Individual differences in X'),
-  #Step 3: X de-meaned 
-  df %>% mutate(X = X - mean_X,mean_X=0,mean_Y=NA,time="3. Remove all between-Individual differences in X"),
-  #Step 4: Remove X lines, add Y
-  df %>% mutate(X = X - mean_X,mean_X=NA,time="4. Figure out between-Individual differences in Y"),
-  #Step 5: Y de-meaned
-  df %>% mutate(X = X - mean_X,Y = Y - mean_Y,mean_X=NA,mean_Y=0,time="5. Remove all between-Individual differences in Y"),
-  #Step 6: Raw demeaned data only
-  df %>% mutate(X = X - mean_X,Y = Y - mean_Y,mean_X=NA,mean_Y=NA,time=after_cor))
+  df %>% mutate(mean_X = NA, mean_Y = NA, time = "Start with raw data."),
+  df %>% mutate(mean_Y = NA, time = "Between-Individual differences in X"),
+  df %>% mutate(X = X - mean_X, mean_X = 0, mean_Y = NA, time = "Remove between-Individual differences in X"),
+  df %>% mutate(X = X - mean_X, mean_X = NA, time = "Between-Individual differences in Y"),
+  df %>% mutate(X = X - mean_X, Y = Y - mean_Y, mean_X = NA, mean_Y = 0, time = "Remove between-Individual differences in Y"),
+  df %>% mutate(X = X - mean_X, Y = Y - mean_Y, mean_X = NA, mean_Y = NA, time = "Raw demeaned data only")
+)
 
-p <- ggplot(dffull,aes(y=Y,x=X,color=as.factor(Person)))+geom_point()+
-  geom_vline(aes(xintercept=mean_X,color=as.factor(Person)))+
-  geom_hline(aes(yintercept=mean_Y,color=as.factor(Person)))+
-  guides(color=guide_legend(title="Individual"))+
-  scale_color_colorblind()+
-  labs(title = 'The Relationship between Y and X, with Individual Fixed Effects \n{next_state}')+
-  transition_states(time,transition_length=c(12,32,12,32,12,12),state_length=c(160,100,75,100,75,160),wrap=FALSE)+
-  ease_aes('sine-in-out')+
-  exit_fade()+enter_fade()
+p <- ggplot(dffull, aes(y = Y, x = X, color = as.factor(Person))) +
+  geom_point() +
+  geom_vline(aes(xintercept = mean_X, color = as.factor(Person))) +
+  geom_hline(aes(yintercept = mean_Y, color = as.factor(Person))) +
+  guides(color = guide_legend(title = "Individual")) +
+  scale_color_colorblind() +
+  labs(title = 'Y and X with Individual Fixed Effects \n{next_state}') +
+  transition_states(time, transition_length = c(12, 32, 12, 32, 12, 12), state_length = c(160, 100, 75, 100, 75, 160), wrap = FALSE) +
+  ease_aes('sine-in-out') +
+  exit_fade() + enter_fade() +
+  theme(
+    plot.title = element_text(size = 8),  
+    axis.title = element_text(size = 6),   
+    legend.title = element_text(size = 6),
+    legend.text = element_text(size = 5),
+    plot.margin = margin(t = 30, r = 10, b = 10, l = 10) # Increase top margin
+  )
+  
 
-animate(p,nframes=200)
-```
+# Use gifski_renderer to render the animation
+animate(p, nframes = 200, renderer = gifski_renderer())
 
-## Notably
-
-- This does assume, of course, that all those back door variables CAN be described by country
-- In other words, that these back doors operate by things that are *fixed* within country
-- If something is a back door and changes over time in that country, fixed effects won't help!
-
-## Varying Over Time
-
-- For example, earlier we mentioned war... that's not fixed within country! A given country is at war sometimes and not other times.
-
-```{r, dev='CairoPNG', echo=FALSE, fig.width=5, fig.height=4}
-dag <- dagify(LifeEx~GDPpc+Coun+War,
-              GDPpc~Coun+War,
-              coords=list(
-                x=c(LifeEx=4,GDPpc=2,Coun=3.5,War=2.5),
-                y=c(LifeEx=2,GDPpc=2,Coun=3,War=3)
-              )) %>% tidy_dagitty()
-ggdag_classic(dag,node_size=20) + 
-  theme_dag_blank()
 ```
 
 ## Varying Over Time
@@ -315,7 +440,7 @@ mmdata <- mmdata %>% mutate(assaultper1000 = assault/pop1000,
 
 - We can see how robbery rates evolve in each state over time as states implement reform
 
-```{r, dev='CairoPNG', echo=FALSE, fig.width=8, fig.height=4.5}
+```{r, dev='CairoPNG', echo=FALSE, fig.width=8, fig.height=4.5, fig.align = "center" }
 ggplot(mmdata,aes(x=year,y=robberyper1000,
                 group=state,color=factor(sentreform)))+
   geom_line(size=1)+scale_color_colorblind(name="Reform")+
