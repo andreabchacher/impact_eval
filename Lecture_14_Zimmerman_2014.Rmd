@@ -11,7 +11,7 @@ library(patchwork)
 library(ggpubr)
 
 # Set up the footer content
-footer_text <- paste("Lecture 11: Kessler and Roth -",
+footer_text <- paste("Lecture 14: Zimmerman 2014 -",
                      "Course Title:  -",
                      Sys.Date())
 
@@ -153,34 +153,44 @@ pre.chunk {
   <img src="uibk_header1.png" class="header-image">
 </div>
 <div class="title-container">
-  <h1>Lecture 11: Kessler and Roth </h1>
+  <h1>Lecture 14: Zimmerman 2014 </h1>
 </div>
-<div class="footer">Lecture 11: Kessler and Roth - Course Title:  - `r Sys.Date()`</div>
+<div class="footer">Lecture 14: Zimmerman 2014 - Course Title: Zimmerman 2014 - `r Sys.Date()`</div>
 
 #####################################
 
-## Difference-in-Differences
 
-- Today we'll be going over Kessler & Roth (2014) and seeing how they do DID
-- This is the same paper used as a coding example in the textbook
-- There's nothing particularly special about this paper - it's not groundbreaking or famous
-- But it's just a good example of how DID works in action
+## Zimmerman 2014
 
-## Discussion 1
+- Zimmerman 2014 uses a cutoff in the admissions process to estimate the returns to education for academically marginal students
+- Today we will be discussing that paper
 
-- What is the theoretical background of why they're studying this?
-- Why do they think that an observational study might do a *better* job than the experiments in this case?
-- What has the previous literature found?
+## Zimmerman 2014
 
-## Discussion 2
+First off:
 
-- How do they set up their DID? How do they define treatment *and control*?
-- What assumptions do they focus on and how do they justify them?
-- What causal diagram might they have in mind?
+- What does he look for and what does he find?
+- Why might we be particularly interested in the returns to education for marginal students?
+- How do we know that RDD gives us the return for *those* students?
+- What kind of RDD is this?
+- How can we characterize his results and any strengths/weaknesses?
 
-## Discussion 3
+## Zimmerman 2014
 
-- What do they find?
-- How can we interpret each column of Table 2?
-- Is there anything else they should have done?
-- How do they make sense of their results in the conclusion?
+- Why does he check for *manipulation of the running variable* in Section V.A?
+- Why might this be important?
+- What does manipulation mean and why might it mess up an RDD result?
+- How does he do this check?
+
+## Running Variable Notes
+
+- We can do these sorts of tests ourselves for manipulation using the `rddensity()` and `rdplotdensity()` functions in the **rddensity** package 
+- Other potential issues with running variables: *granularity*
+- Why might it be difficult to do an RDD if the running variable is very *coarsely defined*?
+
+## Zimmerman 2014
+
+- What other tests does he do? 
+- What does Figure 3 show us?
+- How can we get the results from the graphs and from the regression tables?
+- Is there anything we might want to do differently in this study?
