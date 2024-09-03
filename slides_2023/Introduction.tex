@@ -1,0 +1,234 @@
+\documentclass[
+  25pt,         % default font size: 17pt, 20pt(default), 25pt, 30pt
+  a4paper,
+  landscape,
+  Screen4to3,
+% headrule,
+  footrule ]{foils}
+
+\usepackage[%
+    a4paper,%
+    bookmarks=false,%
+    colorlinks=false,%
+    pdftitle={404050 VU/3 VU Empirical Economics: Impact Evaluation, Fall 2023},%
+    pdfauthor={Andreas Steinmayr}%
+    ]{hyperref}
+
+
+\usepackage[OT1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage{hyperref}
+\usepackage{tikz}
+
+
+
+\input{jo-math}
+
+\newcommand{\Perp}{\perp \! \! \! \perp}
+
+%================================================================
+% Global macros
+%================================================================
+ \MyLogo{Andreas Steinmayr, 404050 VU/3 VU Empirical Economics: Impact Evaluation, Fall 2023}
+ \rightfooter{\thepage}
+
+ \newcommand{\sectiontitle}{}
+
+%================================================================
+% Toggle lecture / print version
+%================================================================
+
+\newboolean{lecture}
+
+\setboolean{lecture}{true}
+
+\ifthenelse{\boolean{lecture}}{%
+  \usepackage[
+      display,        % enable dynamic features for presentations
+      whitebackground % enable blue-on-white colors for presentations
+  ]{texpower}
+  \newcommand{\textclr}{\usecolorset{whitebackground}}
+  \newcommand{\lecture}[1]{#1}
+  \newcommand{\lecturep}[1]{#1}
+  }
+  {
+  \usepackage{texpower}
+  \newcommand{\textclr}{\color{black}}
+  \renewcommand{\pause}{}
+  \newcommand{\lecture}[1]{}
+  \newcommand{\lecturep}[1]{\phantom{#1}}
+  }
+
+\newcommand{\wait}{\pause \vspace{-1mm}}
+
+\newcommand{\xx}{\item[{\small $\bullet$}]}
+
+\newcommand{\definition}{{\bf Definition:}\;}
+\newcommand{\result}{{\bf Result:}\;}
+\newcommand{\namedresult}[1]{{\bf Result~(#1):}\;}
+
+ \addtolength{\textheight}{\headheight +\headsep +\footskip +.3in}
+ \setlength{\headheight}{0pt} \setlength{\headsep}{0pt}
+ \setlength{\footskip}{0pt} \setlength{\foilheadskip}{-.2in}
+
+
+%================================================================
+% Colors
+%================================================================
+
+\definecolor{red}{rgb}{1,0,0}
+\definecolor{green}{rgb}{0,1,0}
+
+\boxedsteps % turn on boxedsteps
+
+
+%================================================================
+\begin{document}
+
+\setlength{\parindent}{0pt}
+
+
+%================================================================
+\foilhead{404050 VU Empirical Economics: Impact Evaluation}
+
+\thispagestyle{empty}
+
+\begin{center}
+
+Andreas Steinmayr \\ 
+
+\bigskip \bigskip \bigskip
+
+Department of Economics \\
+University of Innsbruck \bigskip
+
+Fall 2023
+
+\end{center}
+
+
+%================================================================
+
+%\ifthenelse{\boolean{lecture}}{\input{adveco_110204.tex}}{}
+
+\setcounter{page}{0}
+
+%================================================================
+\foilhead{Organizational information}
+
+\textbf{Who we are}
+
+\textbf{Lecturer} \\
+Univ.-Prof. Andreas Steinmayr, Ph.D. \\ 
+\href{mailto:andreas.steinmayr@uibk.ac.at}{andreas.steinmayr@uibk.ac.at} \\ \url{www.andreassteinmayr.net}
+\bigskip
+
+\textbf{Teaching Assistant} \\
+Sebastian Kupek \\
+\href{mailto:sebastian.kupek@uibk.ac.at}{sebastian.kupek@uibk.ac.at}
+
+
+%================================================================
+\foilhead{Organizational information}
+
+\textbf{How to contact us}
+
+\bi
+   \x Please email me or Sebastian Kupek to schedule an appointment.
+   \x In between the sessions, you can also use the OLAT forum to ask questions. The questions will be public so that others can benefit from the answers as well.
+\ei
+
+%================================================================
+\foilhead{Organizational information}
+
+\textbf{Timetable}
+
+	\begin{itemize}
+		\vsm\item Wed. 04.10. - 07.12. -- \textit{Lectures}
+    \begin{itemize}
+	          \item Wed. 13.12. -- \textit{Exam}
+    \end{itemize}
+    \vsm\item December - January -- \textit{Work on empirical projects}    
+		\vsm\item Wed. 26.01. -- \textit{Seminar day}
+	\end{itemize}
+
+
+
+%================================================================
+\foilhead{Organizational information}
+
+\textbf{Material}
+
+\bi
+
+  \x All material will be uploaded or linked to OLAT
+  \bi
+    \xx Lecture slides
+    \xx Textbooks (if pdf available)
+    \xx Research articles
+    \xx Data for empirical projects
+  \ei
+\ei
+
+
+%================================================================
+
+\foilhead{Textbooks}
+
+\begin{small}
+
+\bi
+\x \textbf{Central textbook:} \vsm
+\bi
+\xx Gertler, P. J. et al. (2016). \emph{Impact Evaluation in Practice.} 2nd Edition, World Bank Publications. \url{www.worldbank.org/ieinpractice}
+\medskip
+\xx Cunningham, S. (2021). \emph{Causal Inference: The Mixtape.} New Haven: Yale University Press. \url{https://mixtape.scunning.com/}
+
+\ei
+
+
+ \x \textbf{Supplementary econometrics textbooks:} \vsm
+\bi
+ \xx Angrist J. and J-S Pischke (2014), \emph{Mastering Metrics\/}, Princeton University Press.
+ \xx Angrist J. and J-S Pischke (2009), \emph{Mostly Harmless Econometrics\/}, Princeton University Press.
+\ei
+ \x In addition, we will discuss some research articles that I will make available to you.
+\ei
+\end{small}
+
+%================================================================
+\foilhead{Examination}
+\bi 
+\x Own empirical project (in groups of 2 to 3 students) (50\%)
+\bi
+  \xx Presentation during seminar day
+  \xx Report
+  \xx More details on the empirical project in the coming weeks
+\ei
+\x Final exam (40\%)
+\x Participation in class (10\%)
+\ei
+
+%================================================================
+\foilhead{What is expected of you}
+\bi
+\x Active participation throughout the course
+\x Read the respective sections of the textbook \& assigned research papers before class
+\x Theoretical and practical knowledge of econometric methods
+\bi
+\xx This is not an introductory econometrics class
+\ei
+\x Apply the knowledge you gain in this course
+\ei
+
+%================================================================
+\end{document}
