@@ -1,21 +1,19 @@
 ---
-title: "Lecture 19 Treatment Effect Methods and Review"
-author: "Nick Huntington-Klein"
-date: "`r Sys.Date()`"
-output:   
-  revealjs::revealjs_presentation:
-    theme: solarized
-    transition: slide
-    self_contained: true
-    smart: true
-    fig_caption: true
-    reveal_options:
-      slideNumber: true
-    
+output:
+  slidy_presentation:
+    self_contained: no
+    css: template.css
+    includes:
+      after_body: footer.html
 ---
 
+<img src="logo.jpg" alt="University Logo" class="logo"/>
+<img src="uibk_header1.png" alt="University Header" class="header-image"/>
+
+<h1>Lecture 19: Treatment Effect Methods and Review</h1>
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(dagitty)
 library(ggdag)
@@ -25,8 +23,22 @@ library(ggpubr)
 library(modelsummary)
 library(fixest)
 library(Cairo)
-theme_set(theme_gray(base_size = 15))
+
+knitr::opts_chunk$set(fig.width = 5, fig.height = 3)
+
+theme_set(
+  theme_minimal(base_size = 10) +   # Adjust base font size
+  theme(
+    plot.title = element_text(size = 10, face = "bold"),  # Title font size and boldness
+    axis.text = element_text(size = 8),                  # Axis text size
+    axis.title = element_text(size = 10),                # Axis label size
+    legend.title = element_text(size = 8),               # Legend title font size
+    legend.text = element_text(size = 7)                 # Legend item font size
+  )
+)
+
 ```
+
 
 ## Some Pointers
 
@@ -42,18 +54,37 @@ theme_set(theme_gray(base_size = 15))
 - It also lets you see *who* is at each part of the distribution
 
 ```{r, echo = TRUE, results='hide'}
+# Ensure the remotes package is installed to handle GitHub installations
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+# Check if SortedEffects is installed, and install it if it's not
+if (!requireNamespace("SortedEffects", quietly = TRUE)) {
+  remotes::install_github("yuqimemeda/SortedEffects")
+}
+
+# Load the SortedEffects package
 library(SortedEffects)
+
+# Ensure the correct version of htmltools is installed
+if (packageVersion("htmltools") < "0.5.7") {
+  install.packages("htmltools")
+}
+
 # Data on being denied for a mortgage.
 data(mortgage)
+
 # Save the formula to reuse later
 fm <- deny ~ black + p_irat + hse_inc + ccred + mcred + pubrec + ltv_med + 
            ltv_high + denpmi + selfemp + single + hischl
+
 # spe() for "Sorted Partial Effects"
 m <- spe(fm, data = mortgage,
          var = 'black', # black is the treatment variable
          method = 'logit',
          us = c(2:98)/100, # Get the distribution from the 2nd to 98th percentile
-         b = 500, bc = TRUE) # Use bootstrapped SEs and bias-correction 
+         b = 500, bc = TRUE) # Use bootstrapped SEs and bias-correction
 ```
 
 ## Sorted Effects
