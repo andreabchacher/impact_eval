@@ -1,7 +1,17 @@
 ---
 output:
-  slidy_presentation: default
+  slidy_presentation:
+    self_contained: no
+    css: template.css
+    includes:
+      after_body: footer.html
 ---
+
+::: {.header-container .first-slide-header}
+<img src="logo.jpg" alt="University Logo" class="logo"/> <img src="uibk_header1.png" alt="University Header" class="header-image"/>
+
+<h1>Lecture 15: Instrumental Variables</h1>
+:::
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
@@ -16,174 +26,41 @@ library(ggthemes)
 library(Cairo)
 library(fixest)
 library(modelsummary)
+library(ragg)
 
-# Set up the footer content
-footer_text <- paste("Lecture 15: Instrumental Variables -",
-                     "Course Title:  -",
-                     Sys.Date())
+knitr::opts_chunk$set(fig.width = 5, fig.height = 3)
+
+theme_set(
+  theme_minimal(base_size = 10) +   # Adjust base font size
+  theme(
+    plot.title = element_text(size = 10, face = "bold"),  # Title font size and boldness
+    axis.text = element_text(size = 8),                  # Axis text size
+    axis.title = element_text(size = 10),                # Axis label size
+    legend.title = element_text(size = 8),               # Legend title font size
+    legend.text = element_text(size = 7)                 # Legend item font size
+  )
+)
 
 ```
 
-#####################################
-<style>
-/* Define colors */
-:root {
-  --uibk-orange: rgb(243, 146, 0);
-  --uibk-blue: rgb(0, 51, 97);
-  --black: rgb(0, 0, 0);
-  --white: rgb(255, 255, 255);
-  --light-blue-grey: rgb(239, 238, 225);
-}
-
-/* Container to position the logo and the header */
-.header-container {
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Full-width header image */
-.header-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-/* Positioning the logo */
-.logo {
-  margin-bottom: 10px;
-  height: 60px;
-  background: white;
-  padding: 5px;
-}
-
-/* Title positioning */
-.title-container {
-  text-align: center;
-  width: 100%;
-  margin-top: 20px;
-}
-
-/* Custom styles for colors and items */
-.title-page-header {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.final-slide {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.institute, .author, .date {
-  color: var(--black);
-}
-
-.block-title, .block-title-example {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.block-body, .block-body-example {
-  background-color: var(--light-blue-grey);
-}
-
-.section-in-toc, .section-page {
-  color: var(--black);
-}
-
-.subsection {
-  color: var(--white);
-}
-
-.title-page-footer {
-  background-color: var(--uibk-orange);
-  color: var(--white);
-}
-
-/* Custom footer styles */
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  background-color: var(--uibk-blue);
-  color: var(--white);
-  padding: 10px 0;
-}
-
-/* Centering slide content */
-.reveal .slides > section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.reveal .slides > section > * {
-  max-width: 80%;
-  margin: auto;
-}
-
-/* Code chunk styling */
-pre, code {
-  background-color: #f8f8f8; /* Light gray background */
-  border: none; /* Remove the default border */
-  padding: 0; /* Remove padding inside the individual code elements */
-  margin: 0; /* Remove margin around the individual code elements */
-}
-
-/* Styling for the whole code-output block */
-pre.chunk {
-  background-color: #f8f8f8; /* Light gray background for the whole block */
-  border: 1px solid #dcdcdc; /* Single light border around the whole block */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px; /* Padding inside the whole block */
-  overflow-x: auto; /* Horizontal scrolling for long lines */
-  font-size: 0.9em; /* Slightly smaller font size */
-  line-height: 1.5em; /* Line height for better readability */
-  max-width: 80%; /* Ensures the block doesn't stretch too wide */
-  margin: 10px auto; /* Centering the block */
-}
-
-</style>
-<!-- First Slide with University Logo and Header Image -->
-<div class="header-container">
-  <img src="universitaet-innsbruck-logo-cmyk-farbe.jpg" class="logo">
-  <img src="uibk_header1.png" class="header-image">
-</div>
-<div class="title-container">
-  <h1>Lecture 15: Instrumental Variables </h1>
-</div>
-<div class="footer">Lecture 15: Instrumental Variables - Course Title:  - `r Sys.Date()`</div>
-
-#####################################
-
 ## Recap
 
-- We've covered quite a few methods for isolating causal effects!
-- Controlling for variables to close back doors (explain X and Y with the control, remove what's explained)
-- Matching on variables to close back doors (find treated and non-treated observations with )
-- Using a control group to control for time (before/after difference for treated and untreated, then difference them)
-- Using a cutoff to construct a very good control group (treated/untreated difference near a cutoff)
+-   We've covered quite a few methods for isolating causal effects!
+-   Controlling for variables to close back doors (explain X and Y with the control, remove what's explained)
+-   Matching on variables to close back doors (find treated and non-treated observations with )
+-   Using a control group to control for time (before/after difference for treated and untreated, then difference them)
+-   Using a cutoff to construct a very good control group (treated/untreated difference near a cutoff)
 
 ## Today
 
-- We've got ONE LAST METHOD to go deep on!
-- Today we'll be covering *instrumental variables*
-- The basic idea is that we have some variable - the instrumental variable - that causes `X` but has no other open back doors!
+-   We've got ONE LAST METHOD to go deep on!
+-   Today we'll be covering *instrumental variables*
+-   The basic idea is that we have some variable - the instrumental variable - that causes `X` but has no other open back doors!
 
 ## Natural Experiments
 
-- This calls back to our idea of trying to mimic an experiment without having an experiment. In fact, let's think about an actual randomized experiment.
-- We have some random assignment `R` that determines your `X`. So even though we have back doors between `X` and `Y`, we can identify `X -> Y`
+-   This calls back to our idea of trying to mimic an experiment without having an experiment. In fact, let's think about an actual randomized experiment.
+-   We have some random assignment `R` that determines your `X`. So even though we have back doors between `X` and `Y`, we can identify `X -> Y`
 
 ```{r, dev='CairoPNG', echo=FALSE, fig.width=6,fig.height=3}
 dag <- dagify(Y~X+W,
@@ -199,50 +76,54 @@ ggdag_classic(dag,node_size=20) +
 
 ## Natural Experiments
 
-- The idea of instrumental variables is this:
-- What if we can find a variable that can take the place of R in the diagram despite not actually being something we randomized in an experiment?
-- If we can do that, we've clearly got a "natural experiment"
-- When we find a variable that can do that, we call it an "instrument" or "instrumental variable"
-- Let's call it `Z`
+-   The idea of instrumental variables is this:
+-   What if we can find a variable that can take the place of R in the diagram despite not actually being something we randomized in an experiment?
+-   If we can do that, we've clearly got a "natural experiment"
+-   When we find a variable that can do that, we call it an "instrument" or "instrumental variable"
+-   Let's call it `Z`
 
 ## Instrumental Variable
 
 So, for `Z` take the place of `R` in the diagram, what do we need?
 
-- `Z` must be related to `X` (typically `Z -> X` but not always)
-- There must be *no open paths* from `Z` to `Y` *except for ones that go through `X`*
+-   `Z` must be related to `X` (typically `Z -> X` but not always)
+-   There must be *no open paths* from `Z` to `Y` *except for ones that go through `X`*
 
 In other words "`Z` is related to `X`, and all the effect of `Z` on `Y` goes THROUGH `X`"
 
 ## Instrumental Variable
 
-- This doesn't relieve us of the duty of identifying a causal effect by closing back doors
-- But it *moves* that duty from the endogenous variable to the instrument, which potentially is easier to identify
-- (and then adds on the additional requirement that there are also no open *front* doors from $Z$ to $Y$ except through $X$ )
+-   This doesn't relieve us of the duty of identifying a causal effect by closing back doors
+-   But it *moves* that duty from the endogenous variable to the instrument, which potentially is easier to identify
+-   (and then adds on the additional requirement that there are also no open *front* doors from $Z$ to $Y$ except through $X$ )
 
 ## Instrumental Variable
 
 How?
 
-- Explain `X` with `Z`, and keep only what *is* explained, `X'`
-- Explain `Y` with `Z`, and keep only what *is* explained, `Y'`
-- [If `Z` is logical/binary] Divide the difference in `Y'` between `Z` values by the difference in `X'` between `Z` values
-- [If `Z` is not logical/binary] Get the correlation between `X'` and `Y'`
+-   Explain `X` with `Z`, and keep only what *is* explained, `X'`
+-   Explain `Y` with `Z`, and keep only what *is* explained, `Y'`
+-   [If `Z` is logical/binary] Divide the difference in `Y'` between `Z` values by the difference in `X'` between `Z` values
+-   [If `Z` is not logical/binary] Get the correlation between `X'` and `Y'`
 
 ## Estimation
 
-- We will be doing this mostly by hand today (until the end part) but most commonly this is estimated using *two stage least squares*
-- We basically just do what we described on the last slide:
+-   We will be doing this mostly by hand today (until the end part) but most commonly this is estimated using *two stage least squares*
+-   We basically just do what we described on the last slide:
 
-1. Use the instruments and controls to explain $X$ in the first stage
-1. Use the controls and the predicted (explained) part of $X$ in place of $X$ in the second stage
-1. (do some standard error adjustments)
+1.  Use the instruments and controls to explain $X$ in the first stage
+2.  Use the controls and the predicted (explained) part of $X$ in place of $X$ in the second stage
+3.  (do some standard error adjustments)
 
 Many ways to do this in R, we'll be doing 2SLS with `feols()` from **fixest**
 
 ## Graphically
 
-```{r, dev='CairoPNG', echo=FALSE, fig.width=8,fig.height=7}
+&nbsp;
+
+&nbsp;
+
+```{r, echo=FALSE}
 df <- data.frame(Z = as.integer(1:200>100),
                  W = rnorm(200)) %>%
   mutate(X = .5+2*W +2*Z+ rnorm(200)) %>%
@@ -274,33 +155,38 @@ endpts <- df %>%
   group_by(Z) %>%
   summarize(mean_X=mean(mean_X),mean_Y=mean(mean_Y))
 
-p <- ggplot(dffull,aes(y=Y,x=X,color=as.factor(Z)))+geom_point()+
-  geom_vline(aes(xintercept=mean_X,color=as.factor(Z)))+
-  geom_hline(aes(yintercept=mean_Y,color=as.factor(Z)))+
-  guides(color=guide_legend(title="Z"))+
+p <- ggplot(dffull,aes(y=Y,x=X,color=as.factor(Z))) +
+  geom_point() +
+  geom_vline(aes(xintercept=mean_X,color=as.factor(Z))) +
+  geom_hline(aes(yintercept=mean_Y,color=as.factor(Z))) +
+  guides(color=guide_legend(title="Z")) +
   geom_segment(aes(x=ifelse(time==afterlab,endpts$mean_X[1],NA),
                    y=endpts$mean_Y[1],xend=endpts$mean_X[2],
-                   yend=endpts$mean_Y[2]),size=1,color='blue')+
-  scale_color_colorblind()+
-  labs(title = 'X -> Y, With Binary Z as an Instrumental Variable \n{next_state}')+
-  transition_states(time,transition_length=c(6,16,6,16,6,6),state_length=c(50,22,12,22,12,50),wrap=FALSE)+
-  ease_aes('sine-in-out')+
-  exit_fade()+enter_fade()
+                   yend=endpts$mean_Y[2]), size=1, color='blue') +
+  scale_color_colorblind() +
+  labs(title = 'X -> Y, With Binary Z as an Instrumental Variable \n{next_state}') +
+  transition_states(time, transition_length=c(6,16,6,16,6,6), 
+                    state_length=c(50,22,12,22,12,50), wrap=FALSE) +
+  ease_aes('sine-in-out') +
+  exit_fade() + 
+  enter_fade() +
+  theme(aspect.ratio = 0.5)  #
+
 
 animate(p,nframes=175)
 ```
 
 ## Instrumental Variables
 
-- Notice that this whole process is like the *opposite* of controlling for a variable
-- We explain `X` and `Y` with the variable, but instead of tossing out what's explained, we ONLY KEEP what's explained!
-- Instead of saying "you're on a back door, I want to close you" we say "you have no back doors! I want my `X` to be just like you! I'm only keeping that part of `X` that's explained by you!"
-- Since `Z` has no back doors, the part of `X` explained by `Z` has no back doors to the part of `Y` explained by `Z`
+-   Notice that this whole process is like the *opposite* of controlling for a variable
+-   We explain `X` and `Y` with the variable, but instead of tossing out what's explained, we ONLY KEEP what's explained!
+-   Instead of saying "you're on a back door, I want to close you" we say "you have no back doors! I want my `X` to be just like you! I'm only keeping that part of `X` that's explained by you!"
+-   Since `Z` has no back doors, the part of `X` explained by `Z` has no back doors to the part of `Y` explained by `Z`
 
 ## Imperfect Assignment
 
-- Let's apply one of the common uses of instrumental variables, which actually *is* when you have a randomized experiment
-- In normal circumstances, if we have an experiment and assign people with `R`, we just compare `Y` across values of `R`:
+-   Let's apply one of the common uses of instrumental variables, which actually *is* when you have a randomized experiment
+-   In normal circumstances, if we have an experiment and assign people with `R`, we just compare `Y` across values of `R`:
 
 ```{r, echo=TRUE}
 df <- tibble(R = sample(c(0,1),500,replace=T)) %>%
@@ -309,11 +195,11 @@ df <- tibble(R = sample(c(0,1),500,replace=T)) %>%
 df %>% group_by(R) %>% summarize(Y=mean(Y))
 ```
 
-##  Imperfect Assignment
+## Imperfect Assignment
 
-- But what happens if you run a randomized experiment and assign people with `R`, but not everyone does what you say? Some "treated" people don't get the treatment, and some "untreated" people do get it
-- When this happens, we can't just compare `Y` across `R`
-- But `R` is still a valid instrument!
+-   But what happens if you run a randomized experiment and assign people with `R`, but not everyone does what you say? Some "treated" people don't get the treatment, and some "untreated" people do get it
+-   When this happens, we can't just compare `Y` across `R`
+-   But `R` is still a valid instrument!
 
 ## Imperfect Assignment
 
@@ -330,7 +216,7 @@ df %>% group_by(R) %>% summarize(Y=mean(Y))
 
 ## Imperfect Assignment
 
-- So let's do IV (instrumental variables); `R` is the IV.
+-   So let's do IV (instrumental variables); `R` is the IV.
 
 ```{r, echo=TRUE}
 iv <- df %>% group_by(R) %>% summarize(Y = mean(Y), X = mean(X))
@@ -342,23 +228,23 @@ iv
 
 ## Another Example
 
-- Justifying that an IV has no back doors can be hard!
-- Usually things aren't as clean-cut as having actual randomization
-- And sometimes we may have to add controls in order to justify the IV
-- Think hard - are there really no other paths from `Z` to `Y`?
-- This will often require *detailed contextual knowledge* of the data generating process
+-   Justifying that an IV has no back doors can be hard!
+-   Usually things aren't as clean-cut as having actual randomization
+-   And sometimes we may have to add controls in order to justify the IV
+-   Think hard - are there really no other paths from `Z` to `Y`?
+-   This will often require *detailed contextual knowledge* of the data generating process
 
 ## Pollution and Driving
 
-- If air quality is really bad, you may choose to drive instead of walk/bike/bus in order to avoid breathing it
-- So do particularly smoggy days lead people to drive more?
-- Pan He and Cheng Xu ask this question using Shanghai as an example!
+-   If air quality is really bad, you may choose to drive instead of walk/bike/bus in order to avoid breathing it
+-   So do particularly smoggy days lead people to drive more?
+-   Pan He and Cheng Xu ask this question using Shanghai as an example!
 
 ## Pollution and Driving
 
-- Plenty of back doors - seasons, whether factories are running, smog levels last week...
+-   Plenty of back doors - seasons, whether factories are running, smog levels last week...
 
-```{r, dev='CairoPNG', echo=FALSE, fig.width=6,fig.height=4.5}
+```{r, dev='CairoPNG', echo=FALSE, fig.width=9,fig.height=4}
 dag <- dagify(Drive~Smog+LastWk+Factry+Season,
               Smog~LastWk+Factry+Season,
               LastWk~Season,
@@ -372,8 +258,7 @@ ggdag_classic(dag,node_size=20) +
 
 ## Pollution and Driving
 
-- The *direction of the wind* could be an IV - Shanghai faces the water, and so when the wind blows West, it brings pollution into the city
-
+-   The *direction of the wind* could be an IV - Shanghai faces the water, and so when the wind blows West, it brings pollution into the city
 
 ```{r, dev='CairoPNG', echo=FALSE, fig.width=6,fig.height=4.5}
 dag <- dagify(Drive~Smog+LastWk+Factry+Season,
@@ -390,27 +275,27 @@ ggdag_classic(dag,node_size=20) +
 
 ## Pollution and Driving
 
-- This gives us an IV we can use!
-- Of course, we need to control for Season to block out the back door.
-- The authors do indeed find that additional smog, brought in by the wind, increases the number of people who choose to drive - making the problem worse later!!
+-   This gives us an IV we can use!
+-   Of course, we need to control for Season to block out the back door.
+-   The authors do indeed find that additional smog, brought in by the wind, increases the number of people who choose to drive - making the problem worse later!!
 
 ## Trade and Manufacturing
 
-- Another example: did Chinese imports reduce US manufacturing employment?
-- Employment in the US manufacturing sector has been dropping for decades
-- (note - *manufacturing itself* isn't dropping, we're manufacturing more than ever, we're just doing it without as many actual people)
+-   Another example: did Chinese imports reduce US manufacturing employment?
+-   Employment in the US manufacturing sector has been dropping for decades
+-   (note - *manufacturing itself* isn't dropping, we're manufacturing more than ever, we're just doing it without as many actual people)
 
 ## Trade and Manufacturing
 
-- The timing of the drop in manufacturing jobs coincides with us importing a lot more Chinese stuff
-- But did the Chinese imports *cause* the decline or was it a coincidence? Automation is another good explanation!
-- Or general declining US competitiveness in the global market, vs. everyone (not just China)
+-   The timing of the drop in manufacturing jobs coincides with us importing a lot more Chinese stuff
+-   But did the Chinese imports *cause* the decline or was it a coincidence? Automation is another good explanation!
+-   Or general declining US competitiveness in the global market, vs. everyone (not just China)
 
 ## Trade and Manufacturing
 
-- Autor, Dorn, & Hanson use Chinese exports *to other countries* (`CEXoth`) as an IV for Chinese exports *to the US* (`CEXus`) in order to estimate the impact of Chinese exports *to the US* on US manufacturing employment (`mfg`)
-- Let's think about whether this makes sense as an IV - any back doors from `CEXoth` to `mfg` we can imagine? Or front doors that don't go through `CEXus`?
-- Also, important, do we think that the arrow from `CEXoth` to `CEXus` is actually there?
+-   Autor, Dorn, & Hanson use Chinese exports *to other countries* (`CEXoth`) as an IV for Chinese exports *to the US* (`CEXus`) in order to estimate the impact of Chinese exports *to the US* on US manufacturing employment (`mfg`)
+-   Let's think about whether this makes sense as an IV - any back doors from `CEXoth` to `mfg` we can imagine? Or front doors that don't go through `CEXus`?
+-   Also, important, do we think that the arrow from `CEXoth` to `CEXus` is actually there?
 
 ## Trade and Manufacturing
 
@@ -431,24 +316,24 @@ ggdag_classic(dag,node_size=20) +
 
 ## Trade and Manufacturing
 
-- So we need to control for `D` in some way to close `CEXoth <- U1 -> D -> mfg` but other than that we have a good instrument
-- (they do this, and also use information like "what does `Close` look like on a regional level?" to improve their estimate)
-- Autor, Dorn, & Hanson found that Chinese exports elsewhere predicted them in the US (China was opening up and becoming more effective as a producer, making their products attractive everywhere)
+-   So we need to control for `D` in some way to close `CEXoth <- U1 -> D -> mfg` but other than that we have a good instrument
+-   (they do this, and also use information like "what does `Close` look like on a regional level?" to improve their estimate)
+-   Autor, Dorn, & Hanson found that Chinese exports elsewhere predicted them in the US (China was opening up and becoming more effective as a producer, making their products attractive everywhere)
 
 ## Trade and Manufacturing
 
-- And when you limit `mfg` and `CEXus` to just what's explained by `CEXoth`, you do see that some decline in `mfg` is because of Chinese imports
+-   And when you limit `mfg` and `CEXus` to just what's explained by `CEXoth`, you do see that some decline in `mfg` is because of Chinese imports
 
-![Direct effect of instruments on `mfg`](Lecture_15_AutorDornHanson.png)
+![^~**Direct\ effect\ of\ instruments\ on\ `mfg`**~^](Lecture_15_AutorDornHanson.png)
 
 ## Practice
 
-- Does the price of cigarettes affect smoking? Get AER package and data(CigarettesSW). Examine with help().
-- Get JUST thecigarette taxes `cigtax` from `taxs-tax`
-- Draw a causal diagram using `packs`, `price`, `cigtax`, and some back door `W`. What might `W` be?
-- Adjust `price` and `cigtax` for inflation: divide them by `cpi`
-- Explain `price` and `packs` with `cigtax` using `cut(,breaks=7)` for `cigtax`
-- Get correlation between the explained parts and plot the explained parts - does price reduce packs smoked?
+-   Does the price of cigarettes affect smoking? Get AER package and data(CigarettesSW). Examine with help().
+-   Get JUST thecigarette taxes `cigtax` from `taxs-tax`
+-   Draw a causal diagram using `packs`, `price`, `cigtax`, and some back door `W`. What might `W` be?
+-   Adjust `price` and `cigtax` for inflation: divide them by `cpi`
+-   Explain `price` and `packs` with `cigtax` using `cut(,breaks=7)` for `cigtax`
+-   Get correlation between the explained parts and plot the explained parts - does price reduce packs smoked?
 
 ## Practice Answers
 
@@ -489,7 +374,7 @@ ggdag_classic(dag,node_size=20) +
 
 ## Practice - Doing it with Regression!
 
-- Common 2SLS estimators: `ivreg` in **AER**, `iv_robust` in **estimatr**, and `feols()` in **fixest**. We'll use the latter since it's fast easy to combine with fixed effects and all kinds of error adjustments
+-   Common 2SLS estimators: `ivreg` in **AER**, `iv_robust` in **estimatr**, and `feols()` in **fixest**. We'll use the latter since it's fast easy to combine with fixed effects and all kinds of error adjustments
 
 ```{r, echo = TRUE, eval = FALSE}
 m <- feols(Y ~ controls | X ~ Z, data = data)
@@ -498,10 +383,10 @@ m <- feols(Y ~ controls | fixed_effects | X ~ Z, data = data, se = 'hetero')
 
 ## Practice - Doing it with Regression
 
-- Reload the cigarette data and skip the summarize step
-- Run our cigarette analysis first doing 2SLS by hand - use `lm()` to run the first stage, then replace `price` with `predict(m)` in the second stage
-- Then use `feols()` to do the same (use 1 to indicate no controls). Coefficients should be the same but the standard errors will be corrected in the `feols()` version!
-- Show both results in `msummary()`
+-   Reload the cigarette data and skip the summarize step
+-   Run our cigarette analysis first doing 2SLS by hand - use `lm()` to run the first stage, then replace `price` with `predict(m)` in the second stage
+-   Then use `feols()` to do the same (use 1 to indicate no controls). Coefficients should be the same but the standard errors will be corrected in the `feols()` version!
+-   Show both results in `msummary()`
 
 ## Practice - Doing it with Regression
 
