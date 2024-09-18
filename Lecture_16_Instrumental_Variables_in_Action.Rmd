@@ -1,21 +1,20 @@
 ---
-title: "Lecture 16 Instrumental Variables in Action"
-author: "Nick Huntington-Klein"
-date: "March 28, 2019"
-output:   
-  revealjs::revealjs_presentation:
-    theme: solarized
-    transition: slide
-    self_contained: true
-    smart: true
-    fig_caption: true
-    reveal_options:
-      slideNumber: true
-    
+output:
+  slidy_presentation:
+    self_contained: no
+    css: template.css
+    includes:
+      after_body: footer.html
 ---
 
+<img src="logo.jpg" alt="University Logo" class="logo"/> <img src="uibk_header1.png" alt="University Header" class="header-image"/>
+
+<h1>Lecture 16: Instrumental Variables in Action</h1>
+
+
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(dagitty)
 library(ggdag)
@@ -24,7 +23,19 @@ library(ggthemes)
 library(Cairo)
 library(fixest)
 library(modelsummary)
-theme_set(theme_gray(base_size = 15))
+
+knitr::opts_chunk$set(fig.width = 5, fig.height = 3)
+
+theme_set(
+  theme_minimal(base_size = 10) +   # Adjust base font size
+  theme(
+    plot.title = element_text(size = 10, face = "bold"),  # Title font size and boldness
+    axis.text = element_text(size = 8),                  # Axis text size
+    axis.title = element_text(size = 10),                # Axis label size
+    legend.title = element_text(size = 8),               # Legend title font size
+    legend.text = element_text(size = 7)                 # Legend item font size
+  )
+)
 ```
 
 ## Recap
@@ -83,12 +94,26 @@ IV <- USC93 %>% mutate(lastyr.invest = lag(income) - lag(expenditure))
 ## Common Macro-Type Example
 
 ```{r, echo = TRUE}
-m <- feols(expenditure ~ 1 | income ~ lastyr.invest, data = IV, se = 'hetero')
-msummary(list('Income (First Stage)' = m$iv_first_stage,
-              'Expenditure' = m), 
+# Remove rows with missing data in the variables of interest
+IV_clean <- IV %>%
+  filter(!is.na(income) & !is.na(lastyr.invest) & !is.na(expenditure))
+
+# Estimate the first-stage regression manually
+first_stage_model <- feols(income ~ lastyr.invest, data = IV_clean, se = 'hetero')
+
+# Add fitted values (predicted income) to the cleaned dataset
+IV_clean$fit_income <- fitted(first_stage_model)
+
+# Estimate the second-stage regression using the fitted values from the first stage
+second_stage_model <- feols(expenditure ~ fit_income, data = IV_clean, se = 'hetero')
+
+# Use msummary to summarize the results
+msummary(list('Income (First Stage)' = first_stage_model,
+              'Expenditure' = second_stage_model), 
          coef_map = c('fit_income' = 'Expenditure',
                       'lastyr.invest' = 'Lagged Investment'), 
          gof_omit = 'AIC|BIC|R2|F|Lik', stars = TRUE)
+
 ```
 
 ## College Remediation
@@ -245,3 +270,5 @@ ggdag_classic(dag,node_size=20) +
     - `Z` is related to `X`
     - All back doors from `Z` to `Y` must be closed
     - All front doors from `Z` to `Y` must go through `X`
+
+
