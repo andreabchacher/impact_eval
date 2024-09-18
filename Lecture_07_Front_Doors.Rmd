@@ -1,7 +1,15 @@
 ---
 output:
-  slidy_presentation: default
+  slidy_presentation:
+    self_contained: no
+    css: template.css
+    includes:
+      after_body: footer.html
 ---
+
+<img src="logo.jpg" alt="University Logo" class="logo"/> <img src="uibk_header1.png" alt="University Header" class="header-image"/>
+
+<h1>Lecture 7: Front Doors, and Other Details</h1>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
@@ -15,154 +23,22 @@ library(gganimate)
 library(ggthemes)
 library(Cairo)
 
-# Set up the footer content
-footer_text <- paste("Lecture 7: Front Doors, and Other Details -",
-                     "Course Title:  -",
-                     Sys.Date())
+knitr::opts_chunk$set(fig.width = 5, fig.height = 3)
+
+theme_set(
+  theme_minimal(base_size = 10) +   # Adjust base font size
+  theme(
+    plot.title = element_text(size = 10, face = "bold"),  # Title font size and boldness
+    axis.text = element_text(size = 8),                  # Axis text size
+    axis.title = element_text(size = 10),                # Axis label size
+    legend.title = element_text(size = 8),               # Legend title font size
+    legend.text = element_text(size = 7)                 # Legend item font size
+  )
+)
+
 
 ```
 
-#####################################
-<style>
-/* Define colors */
-:root {
-  --uibk-orange: rgb(243, 146, 0);
-  --uibk-blue: rgb(0, 51, 97);
-  --black: rgb(0, 0, 0);
-  --white: rgb(255, 255, 255);
-  --light-blue-grey: rgb(239, 238, 225);
-}
-
-/* Container to position the logo and the header */
-.header-container {
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Full-width header image */
-.header-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-/* Positioning the logo */
-.logo {
-  margin-bottom: 10px;
-  height: 60px;
-  background: white;
-  padding: 5px;
-}
-
-/* Title positioning */
-.title-container {
-  text-align: center;
-  width: 100%;
-  margin-top: 20px;
-}
-
-/* Custom styles for colors and items */
-.title-page-header {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.final-slide {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.institute, .author, .date {
-  color: var(--black);
-}
-
-.block-title, .block-title-example {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.block-body, .block-body-example {
-  background-color: var(--light-blue-grey);
-}
-
-.section-in-toc, .section-page {
-  color: var(--black);
-}
-
-.subsection {
-  color: var(--white);
-}
-
-.title-page-footer {
-  background-color: var(--uibk-orange);
-  color: var(--white);
-}
-
-/* Custom footer styles */
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  background-color: var(--uibk-blue);
-  color: var(--white);
-  padding: 10px 0;
-}
-
-/* Centering slide content */
-.reveal .slides > section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.reveal .slides > section > * {
-  max-width: 80%;
-  margin: auto;
-}
-
-/* Code chunk styling */
-pre, code {
-  background-color: #f8f8f8; /* Light gray background */
-  border: none; /* Remove the default border */
-  padding: 0; /* Remove padding inside the individual code elements */
-  margin: 0; /* Remove margin around the individual code elements */
-}
-
-/* Styling for the whole code-output block */
-pre.chunk {
-  background-color: #f8f8f8; /* Light gray background for the whole block */
-  border: 1px solid #dcdcdc; /* Single light border around the whole block */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px; /* Padding inside the whole block */
-  overflow-x: auto; /* Horizontal scrolling for long lines */
-  font-size: 0.9em; /* Slightly smaller font size */
-  line-height: 1.5em; /* Line height for better readability */
-  max-width: 80%; /* Ensures the block doesn't stretch too wide */
-  margin: 10px auto; /* Centering the block */
-}
-
-</style>
-<!-- First Slide with University Logo and Header Image -->
-<div class="header-container">
-  <img src="universitaet-innsbruck-logo-cmyk-farbe.jpg" class="logo">
-  <img src="uibk_header1.png" class="header-image">
-</div>
-<div class="title-container">
-  <h1>Lecture 7: Front Doors, and Other Details </h1>
-</div>
-<div class="footer">Lecture 7: Front Doors, and Other Details - Course Title:  - `r Sys.Date()`</div>
-
-#####################################
 
 ## Recap
 
@@ -203,7 +79,7 @@ What is a randomized experiment?
 
 - Annoyingly, most things we'd like to know the effect of have back-door paths to most of the outcomes we'd like to know the effect *on*
 
-```{r, dev = 'CairoPNG', fig.height = 5}
+```{r, dev = 'CairoPNG', fig.height = 9, fig.width=12}
 dag <- dagify(Outcome ~ Treatment + AnnoyingEndogeneity,
               Treatment ~ AnnoyingEndogeneity,
               coords=list(
@@ -213,24 +89,27 @@ dag <- dagify(Outcome ~ Treatment + AnnoyingEndogeneity,
 ggdag_classic(dag,node_size=10) + 
   theme_dag_blank() +
   expand_limits(x=c(.5,3.5))
-
 ```
 
 ## Random experiments and causality
 
 - The whole idea of running an experiment is to *add another source of variation in the Treatment that has no back doors*
 
-```{r, dev = 'CairoPNG', fig.height = 5}
+&nbsp;
+&nbsp;
+
+
+```{r, dev = 'CairoPNG', fig.height = 5, fig.width=10}
 dag <- dagify(Outcome ~ Treatment + AnnoyingEndogeneity,
               Treatment ~ AnnoyingEndogeneity + Randomization,
-              coords=list(
-                x=c(Randomization = 0,Treatment = 3, AnnoyingEndogeneity = 4, Outcome = 5),
-                y=c(Randomization = 1, Treatment = 1, AnnoyingEndogeneity = 2, Outcome = 1)
+              coords = list(
+                x = c(Randomization = 0, Treatment = 2, AnnoyingEndogeneity = 4, Outcome = 6),
+                y = c(Randomization = 1, Treatment = 1, AnnoyingEndogeneity = 2, Outcome = 1)
               )) %>% tidy_dagitty()
-ggdag_classic(dag,node_size=10) + 
-  theme_dag_blank() + 
-  expand_limits(x=c(-.5,2.5))
 
+ggdag_classic(dag, node_size = 7) + 
+  theme_dag_blank() + 
+  expand_limits(x = c(-1, 7))  
 ```
 
 ## Random experiments and causality
@@ -238,7 +117,10 @@ ggdag_classic(dag,node_size=10) +
 - If the randomization is truly random, it can't possibly be related to anything on the back doors. It ONLY affects Treatment - nothing else!
 - So AMONG the people who were randomized in/out of treatment, this is what the diagram looks like. Easy identification!
 
-```{r, dev = 'CairoPNG', fig.height = 2}
+&nbsp;
+&nbsp;
+
+```{r, dev = 'CairoPNG', fig.height = 2, fig.width=10}
 dag <- dagify(Outcome ~ Treatment ,
               Treatment ~  Randomization,
               coords=list(
@@ -248,7 +130,6 @@ dag <- dagify(Outcome ~ Treatment ,
 ggdag_classic(dag,node_size=10) + 
   theme_dag_blank() + 
   expand_limits(x=c(-.5,2.5))
-
 ```
 
 ## Experiments
@@ -296,7 +177,7 @@ ggdag_classic(dag,node_size=10) +
 
 ## The Vietnam Draft
 
-```{r, dev = 'CairoPNG', fig.height = 4}
+```{r, dev = 'CairoPNG', fig.height = 5, fig.width= 10}
 dag <- dagify(Earnings ~ College + AnnoyingEndogeneity,
               College ~ AnnoyingEndogeneity + Birthdate,
               coords=list(
@@ -332,7 +213,7 @@ ggdag_classic(dag,node_size=10) +
 
 - The variation in $Birthdate$ has no back doors, so if we isolate that...
 
-```{r, dev = 'CairoPNG', fig.height = 2}
+```{r, dev = 'CairoPNG', fig.height = 5, fig.width= 10}
 dag <- dagify(Earnings ~ College,
               College ~  Birthdate,
               coords=list(
@@ -375,7 +256,7 @@ ggdag_classic(dag,node_size=10) +
 
 - Imagine this version of our wine and lifespan graph from last time
 
-```{r, dev='CairoPNG', echo=FALSE, fig.width=7, fig.height=5}
+```{r, dev='CairoPNG', echo=FALSE, fig.width=10, fig.height=5}
 dag <- dagify(life~drugs+health+income,
               drugs~wine,
               wine~health+income,
@@ -400,7 +281,7 @@ ggdag_classic(dag,node_size=20) +
 
 - Consider this original application of the front-door method
 
-```{r, dev='CairoPNG', echo=FALSE, fig.width=7, fig.height=5}
+```{r, dev='CairoPNG', echo=FALSE, fig.width=9, fig.height=5}
 dag <- dagify(tar~cigs,
               cigs~health+income,
               life~tar+health+income,
@@ -467,7 +348,7 @@ ggdag_classic(dag,node_size=20) +
 
 ## Placebo Tests
 
-```{r, dev = 'CairoPNG'}
+```{r, dev = 'CairoPNG', fig.width= 10}
 dag <- dagify(Earnings ~ College + ParentalIncome,
               College ~ ParentalIncome + Birthdate,
               coords=list(
@@ -506,7 +387,7 @@ In the diagram on the next page...
 
 ## Practice
 
-```{r, dev = 'CairoPNG'}
+```{r, dev = 'CairoPNG', fig.width= 10}
 set.seed(1000)
 dag <- dagify(Y~C+A+U1,
               A~D,
