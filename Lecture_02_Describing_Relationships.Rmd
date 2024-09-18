@@ -1,7 +1,20 @@
 ---
 output:
-  slidy_presentation: default
+  slidy_presentation:
+    self_contained: no
+    css: template.css
+    includes:
+      after_body: footer.html
+  beamer_presentation: default
 ---
+
+## 
+
+::: {.header-container .first-slide-header}
+<img src="logo.jpg" alt="University Logo" class="logo"/> <img src="uibk_header1.png" alt="University Header" class="header-image"/>
+
+<h1>Lecture 2: Describing Relationships</h1>
+:::
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
@@ -17,219 +30,83 @@ oster <- read_dta('nhanes_summary_cleaned.dta') %>%
     TRUE ~ 'Took Vitamin E'
   ))
 
-# Set up the footer content
-footer_text <- paste("Lecture 2: Describing Relationships -",
-                     "Course Title:  -",
-                     Sys.Date())
+knitr::opts_chunk$set(fig.width = 8, fig.height = 6)
 
+theme_set(
+  theme_minimal(base_size = 10) +   # Adjust base font size
+  theme(
+    plot.title = element_text(size = 10, face = "bold"),  # Title font size and boldness
+    axis.text = element_text(size = 8),                  # Axis text size
+    axis.title = element_text(size = 10),                # Axis label size
+    legend.title = element_text(size = 8),               # Legend title font size
+    legend.text = element_text(size = 7)                 # Legend item font size
+  )
+)
 ```
-
-#####################################
-<style>
-/* Define colors */
-:root {
-  --uibk-orange: rgb(243, 146, 0);
-  --uibk-blue: rgb(0, 51, 97);
-  --black: rgb(0, 0, 0);
-  --white: rgb(255, 255, 255);
-  --light-blue-grey: rgb(239, 238, 225);
-}
-
-/* Container to position the logo and the header */
-.header-container {
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Full-width header image */
-.header-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-/* Positioning the logo */
-.logo {
-  margin-bottom: 10px;
-  height: 100px;
-  background: white;
-  padding: 5px;
-}
-
-/* Title positioning */
-.title-container {
-  text-align: center;
-  width: 100%;
-  margin-top: 20px;
-}
-
-/* Custom styles for colors and items */
-.title-page-header {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.final-slide {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.institute, .author, .date {
-  color: var(--black);
-}
-
-.block-title, .block-title-example {
-  background-color: var(--uibk-blue);
-  color: var(--white);
-}
-
-.block-body, .block-body-example {
-  background-color: var(--light-blue-grey);
-}
-
-.section-in-toc, .section-page {
-  color: var(--black);
-}
-
-.subsection {
-  color: var(--white);
-}
-
-.title-page-footer {
-  background-color: var(--uibk-orange);
-  color: var(--white);
-}
-
-/* Custom footer styles */
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  background-color: var(--uibk-blue);
-  color: var(--white);
-  padding: 10px 0;
-}
-
-/* Centering slide content */
-.reveal .slides > section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.reveal .slides > section > * {
-  max-width: 80%;
-  margin: auto;
-}
-
-/* Code chunk styling */
-pre, code {
-  background-color: #f8f8f8; /* Light gray background */
-  border: none; /* Remove the default border */
-  padding: 0; /* Remove padding inside the individual code elements */
-  margin: 0; /* Remove margin around the individual code elements */
-}
-
-/* Styling for the whole code-output block */
-pre.chunk {
-  background-color: #f8f8f8; /* Light gray background for the whole block */
-  border: 1px solid #dcdcdc; /* Single light border around the whole block */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px; /* Padding inside the whole block */
-  overflow-x: auto; /* Horizontal scrolling for long lines */
-  font-size: 0.9em; /* Slightly smaller font size */
-  line-height: 1.5em; /* Line height for better readability */
-  max-width: 80%; /* Ensures the block doesn't stretch too wide */
-  margin: 10px auto; /* Centering the block */
-}
-
-</style>
-<!-- First Slide with University Logo and Header Image -->
-<div class="header-container">
-  <img src="universitaet-innsbruck-logo-cmyk-farbe.jpg" class="logo">
-  <img src="uibk_header1.png" class="header-image">
-</div>
-<div class="title-container">
-  <h1>Lecture 2: Describing Relationships </h1>
-</div>
-<div class="footer"> Lecture 2: Describing Relationships - Course Title:  - `r Sys.Date()`</div>
-
-#####################################
-
 
 ## Relationships
 
-- Two variables $X$ and $Y$ are *independent* if learning the value of one tells you nothing about the other
-- For example, knowing the outcome of a roulette spin tells you nothing about what the next spin will be
-- They are *dependent* if learning the value of one *changes the distribution* of the other
-- For example, among all Americans, about 50.8\% are legally female and about 49.2\% are legally male
-- But if we *learn that someone's name is Susan*, that distribution will change considerably in favor of female!
+-   Two variables $X$ and $Y$ are *independent* if learning the value of one tells you nothing about the other
+-   For example, knowing the outcome of a roulette spin tells you nothing about what the next spin will be
+-   They are *dependent* if learning the value of one *changes the distribution* of the other
+-   For example, among all Americans, about 50.8% are legally female and about 49.2% are legally male
+-   But if we *learn that someone's name is Susan*, that distribution will change considerably in favor of female!
 
 ## Conditional Values
 
-- Another way of saying we *learn the value of one variable* is to say we *condition* on the value of that variable
-- "Conditional on someone's name being Susan, the distribution of legal sex is 96% female and 4% male"
-- P(Gender | Name = "Susan")
-- All the stuff we talked about last time with distributions applies here
-- It just applies only to *a portion of the data* (the Susans!)
+-   Another way of saying we *learn the value of one variable* is to say we *condition* on the value of that variable
+-   "Conditional on someone's name being Susan, the distribution of legal sex is 96% female and 4% male"
+-   P(Gender \| Name = "Susan")
+-   All the stuff we talked about last time with distributions applies here
+-   It just applies only to *a portion of the data* (the Susans!)
 
 ## Conditional Means
 
-- In many fields, including economics, we are very interested in calculating *conditional means*
-- i.e. *what is the mean of the conditional distribution?*
-- And we want to know this not only for *one* value of the variable we're conditioning on, but *all* the values
-- The *population* conditional mean is the *conditional expectation*, or $E(Y|X)$
+-   In many fields, including economics, we are very interested in calculating *conditional means*
+-   i.e. *what is the mean of the conditional distribution?*
+-   And we want to know this not only for *one* value of the variable we're conditioning on, but *all* the values
+-   The *population* conditional mean is the *conditional expectation*, or $E(Y|X)$
 
 ## Conditional Means/Expectations and Relationships
 
-- Talking about how two variables are related is just another way of talking about conditional values (usually, conditional means)
-- If $X$ and $Y$ are positively related, that means "at higher values of $X$, the conditional expectation $E(Y|X)$ is higher"
-- If they're negatively related, "at higher values of $X$, $E(Y|X)$ is lower"
-- If their relationship is U-shaped (or similar), "at higher values of $X$, $E(Y|X)$ changes but not always in the same direction"
+-   Talking about how two variables are related is just another way of talking about conditional values (usually, conditional means)
+-   If $X$ and $Y$ are positively related, that means "at higher values of $X$, the conditional expectation $E(Y|X)$ is higher"
+-   If they're negatively related, "at higher values of $X$, $E(Y|X)$ is lower"
+-   If their relationship is U-shaped (or similar), "at higher values of $X$, $E(Y|X)$ changes but not always in the same direction"
 
 ## Conditional Means and Causal Inference
 
-- *Statistics* is great at telling us how two variables are related
-- *Causal inference* is *entirely* about figuring out *which conditional relationships are causal and in what way*
-- You can't infer causality from a relationship alone!
-- As I'll show, some of the relationships $Y|X$ you'll see today may reflect an $X$ that causes $Y$, or a $Y$ that causes $X$, or something else entirely!
+-   *Statistics* is great at telling us how two variables are related
+-   *Causal inference* is *entirely* about figuring out *which conditional relationships are causal and in what way*
+-   You can't infer causality from a relationship alone!
+-   As I'll show, some of the relationships $Y|X$ you'll see today may reflect an $X$ that causes $Y$, or a $Y$ that causes $X$, or something else entirely!
 
 ## "Explaining"
 
-- We can also say that $Y|X$ is "the part of $Y$ that is *explained by* $X$"
-- If $E(CoffeeCupsPerDay |$ $Occupation = Professor) = 1.79$, and I drink 3 cups per day, then 1.79 of my cups are "explained by" the fact that I'm a professor, and $3 - 1.79 = 1.21$ of my cups are "not explained by" being a professor
-- This can extend to multiple variables!
-- If $E(CoffeeCupsPerDay |$ $Occupation = Professor,$ $Gender = Male) = 2.13$, then 2.13 of my cups are "explained by" occupation and age, and $3 - 2.13 = .83$ of my cups are "not explained by" those two things
+-   We can also say that $Y|X$ is "the part of $Y$ that is *explained by* $X$"
+-   If $E(CoffeeCupsPerDay |$ $Occupation = Professor) = 1.79$, and I drink 3 cups per day, then 1.79 of my cups are "explained by" the fact that I'm a professor, and $3 - 1.79 = 1.21$ of my cups are "not explained by" being a professor
+-   This can extend to multiple variables!
+-   If $E(CoffeeCupsPerDay |$ $Occupation = Professor,$ $Gender = Male) = 2.13$, then 2.13 of my cups are "explained by" occupation and age, and $3 - 2.13 = .83$ of my cups are "not explained by" those two things
 
 ## "Explaining"
 
-- This is a purely statistical explanation
-- This doesn't necessarily mean that 2.13 of my cups are *because* I'm a professor and a man, but rather that 2.13 of my cups are *what would be expected* given what you know about me
-- The "explanation why" would be the same *statistical* calculation, but would require us to figure out *which* of those calculations is causal in nature.
+-   This is a purely statistical explanation
+-   This doesn't necessarily mean that 2.13 of my cups are *because* I'm a professor and a man, but rather that 2.13 of my cups are *what would be expected* given what you know about me
+-   The "explanation why" would be the same *statistical* calculation, but would require us to figure out *which* of those calculations is causal in nature.
 
 ## Ways of Demonstrating Conditional Means
 
-- When $X$ only takes a few values, we can just show the distrbution of $Y$ conditional on each of the values of $X$, and compare them to each other. Any distribution-showing method works - density plots, bar graphs...
-- Scatterplots show all the data and imply the conditional mean
-- For continuous $X$ data, you can calculate the conditional mean $Y|X$ over different *ranges* of $X$, either splitting $X$ into bins, or doing "local means"
-- Regression
+-   When $X$ only takes a few values, we can just show the distrbution of $Y$ conditional on each of the values of $X$, and compare them to each other. Any distribution-showing method works - density plots, bar graphs...
+-   Scatterplots show all the data and imply the conditional mean
+-   For continuous $X$ data, you can calculate the conditional mean $Y|X$ over different *ranges* of $X$, either splitting $X$ into bins, or doing "local means"
+-   Regression
 
 ## Example
 
-- Following the textbook, we'll be using data from Emily Oster's study of the relationship between taking Vitamin E and health outcomes 
-- (and whether that relationship changes as a result of Vitamin E being briefly recommended, then not!)
-- We'll start with versions that can be used for *discrete* $X$ values, like "smoking vs. non-smoking"
-- Remember, the proportion of a binary variable *is* its mean
+-   Following the textbook, we'll be using data from Emily Oster's study of the relationship between taking Vitamin E and health outcomes
+-   (and whether that relationship changes as a result of Vitamin E being briefly recommended, then not!)
+-   We'll start with versions that can be used for *discrete* $X$ values, like "smoking vs. non-smoking"
+-   Remember, the proportion of a binary variable *is* its mean
 
 ## Conditional Means: Contrasting Bar Graphs
 
@@ -255,13 +132,12 @@ ggplot(oster %>%
   geom_text(aes(label = sup_label, y = N + .05),position = position_dodge(0.9), family = 'Garamond', size = 14/.pt) +
   guides(fill = FALSE) +
   labs(x = NULL, y = 'Proportion') +
-  scale_fill_manual(values = c('gray','black'))+
-  theme_pubr()
+  scale_fill_manual(values = c('gray','black'))
 ```
 
 ## Conditional Means
 
-- Or we can just show that information in a table
+-   Or we can just show that information in a table
 
 ```{r, echo = TRUE}
 oster %>% select(smoke,supplement_vite_single) %>%
@@ -270,9 +146,10 @@ oster %>% select(smoke,supplement_vite_single) %>%
                      TRUE ~ 'Smoking'))) %>% 
   table() %>% prop.table(margin = 1)
 ```
+
 ## Conditional Means
 
-- That was $TookVitaminE|Smoking$. How about $Smoking|TookVitaminE$?
+-   That was $TookVitaminE|Smoking$. How about $Smoking|TookVitaminE$?
 
 ```{r, echo = TRUE}
 oster %>% select(smoke,supplement_vite_single) %>%
@@ -281,7 +158,6 @@ oster %>% select(smoke,supplement_vite_single) %>%
                      TRUE ~ 'Smoking'))) %>% 
   table() %>% prop.table(margin = 2)
 ```
-
 
 ## Conditional Distributions: Contrasting Densities
 
@@ -313,10 +189,10 @@ ggplot(oster, aes(x = vite, linetype = factor(vigorous_exercise_month))) +
 
 ## Continuous $X$ Variables
 
-- What if the $X$ variable we want to condition on is continuous? 
-- We have options!
-- A scatterplot will just show *all* the data (which may be too much/busy!)
-- Of course, if we really want to *understand* or *describe* the relationship, we'll need some way of summarizing what we see!
+-   What if the $X$ variable we want to condition on is continuous?
+-   We have options!
+-   A scatterplot will just show *all* the data (which may be too much/busy!)
+-   Of course, if we really want to *understand* or *describe* the relationship, we'll need some way of summarizing what we see!
 
 ## Scatterplots
 
@@ -340,18 +216,18 @@ ggplot(oster %>% slice(150:300), aes(x= age, y = heart_health)) +
 
 ## Data in the Social Sciences
 
-- Looks like a blob with sort of a suggestion of a relationship, rather than something really clear, doesn't it?
-- That's par for the course in the social sciences
-- Super-clear scatterplots are for relationships that are truly *bivariate*, i.e. $X$ explains $Y$ almost perfectly
-- If there's *a lot of other stuff going on*, i.e. unexplained parts, the data reflects that and looks more blobby
-- In the social sciences, there's ALWAYS a lot of other stuff going on
+-   Looks like a blob with sort of a suggestion of a relationship, rather than something really clear, doesn't it?
+-   That's par for the course in the social sciences
+-   Super-clear scatterplots are for relationships that are truly *bivariate*, i.e. $X$ explains $Y$ almost perfectly
+-   If there's *a lot of other stuff going on*, i.e. unexplained parts, the data reflects that and looks more blobby
+-   In the social sciences, there's ALWAYS a lot of other stuff going on
 
 ## Binning
 
-- How can we calculate a conditional mean when there might only be one observation with a given $X$ value? Can't really estimate $E(Y|X=x)$ well if there's only one observation with $X = x$!
-- We'll need to group observations together
-- One way is binning - we'll rarely actually use this but it's good for demonstration
-- Cut up $X$ into bins, and take the average of $Y$ within each bin
+-   How can we calculate a conditional mean when there might only be one observation with a given $X$ value? Can't really estimate $E(Y|X=x)$ well if there's only one observation with $X = x$!
+-   We'll need to group observations together
+-   One way is binning - we'll rarely actually use this but it's good for demonstration
+-   Cut up $X$ into bins, and take the average of $Y$ within each bin
 
 ## Binning
 
@@ -366,7 +242,7 @@ oster %>% filter(bmi < 100) %>%
 
 ## Binning
 
-- Any guesses why that last bin is weird?
+-   Any guesses why that last bin is weird?
 
 ```{r}
 oster %>% filter(bmi < 100) %>%
@@ -388,17 +264,17 @@ oster %>% filter(bmi < 100) %>%
 
 ## Binning
 
-- Doing this binning thing tells us the average of $Y$ within certain defined ranges of $X$, letting us estimate the population $E(Y | X \in [StartofBin,EndofBin])$
-- So I can get $E(Y|X=x)$ by just seeing which bin $x$ is in
-- Of course, this is a bit arbitrary and strange - where do the bin definitions come from, how close should we make them, and is it really reasonable to see big jumps going from the edge of one bin to another?
+-   Doing this binning thing tells us the average of $Y$ within certain defined ranges of $X$, letting us estimate the population $E(Y | X \in [StartofBin,EndofBin])$
+-   So I can get $E(Y|X=x)$ by just seeing which bin $x$ is in
+-   Of course, this is a bit arbitrary and strange - where do the bin definitions come from, how close should we make them, and is it really reasonable to see big jumps going from the edge of one bin to another?
 
 ## Local Means
 
-- Another approach is to take *local expectations*
-- Same binning idea, but we define the bin in a *rolling* manner
-- For each value $x$, use a bin *centered on that $x$* (perhaps weighting closer values more highly)
-- This gives us a smooth estimate (no jumps!) and while we still have decisions to make (width of bin, weights), it's less arbitrary
-- If we fit a quadtratic shape at each of those points, that's a LOESS (Locally Estimated Scatterplot Smoothing)
+-   Another approach is to take *local expectations*
+-   Same binning idea, but we define the bin in a *rolling* manner
+-   For each value $x$, use a bin *centered on that* $x$ (perhaps weighting closer values more highly)
+-   This gives us a smooth estimate (no jumps!) and while we still have decisions to make (width of bin, weights), it's less arbitrary
+-   If we fit a quadtratic shape at each of those points, that's a LOESS (Locally Estimated Scatterplot Smoothing)
 
 ## LOESS
 
@@ -430,21 +306,21 @@ oster %>% filter(bmi < 100) %>%
 
 Benefits of LOESS:
 
-- Nonparametric
-- Easy to understand
+-   Nonparametric
+-   Easy to understand
 
 Downsides:
 
-- Difficult to use to sum up a relationship
-- Or try to uncover population relationships
+-   Difficult to use to sum up a relationship
+-   Or try to uncover population relationships
 
 ## Regression
 
-- This brings us to regression!
-- Regression takes the *idea* behind a LOESS curve - use a line to represent the conditional mean at each value of $X$, smoothing over gaps between the $X$'s - and generalizes it using a *shape*
-- Regression is the process of fitting a line to data, *and requiring that that line holds a particular shape*
-- In basic forms of regression, that shape is a straight line
-- (You can make it a bit curvy by adding polynomial terms)
+-   This brings us to regression!
+-   Regression takes the *idea* behind a LOESS curve - use a line to represent the conditional mean at each value of $X$, smoothing over gaps between the $X$'s - and generalizes it using a *shape*
+-   Regression is the process of fitting a line to data, *and requiring that that line holds a particular shape*
+-   In basic forms of regression, that shape is a straight line
+-   (You can make it a bit curvy by adding polynomial terms)
 
 ## Linear Regression
 
@@ -478,21 +354,21 @@ $$ Y = \beta_0 + \beta_1X + \varepsilon $$
 
 Pros:
 
-- $\beta_1$ is a lot easier to interpret than continuously changing local means
-- We can extrapolate to areas of $X$ where we have no observations (but don't go beyond edge of data!)
-- We understand the sampling distribution of $\hat{\beta}_1$
+-   $\beta_1$ is a lot easier to interpret than continuously changing local means
+-   We can extrapolate to areas of $X$ where we have no observations (but don't go beyond edge of data!)
+-   We understand the sampling distribution of $\hat{\beta}_1$
 
 Cons:
 
-- If we don't use the *right shape* the results will be bad
-- We may toss out some interesting information that doesn't fit the shape
+-   If we don't use the *right shape* the results will be bad
+-   We may toss out some interesting information that doesn't fit the shape
 
 ## Line-Fitting
 
-- Easy interpretation: a one-unit change in $X$ is **associated with** a $\beta_1$-unit change in $Y$
-- (If we've *identified a causal effect* then a one-unit change in $X$ **causes** a $\beta_1$-unit change in $Y$ )
-- $\hat{\beta}_1$ follows a normal distribution (or nearly so, if $\varepsilon$ isn't normal), so easy to do hypothesis tests
-- Eight million notes and details to go over that we won't today, but they'll come up, and you hopefully covered some in econometrics!
+-   Easy interpretation: a one-unit change in $X$ is **associated with** a $\beta_1$-unit change in $Y$
+-   (If we've *identified a causal effect* then a one-unit change in $X$ **causes** a $\beta_1$-unit change in $Y$ )
+-   $\hat{\beta}_1$ follows a normal distribution (or nearly so, if $\varepsilon$ isn't normal), so easy to do hypothesis tests
+-   Eight million notes and details to go over that we won't today, but they'll come up, and you hopefully covered some in econometrics!
 
 ## Line-Fitting
 
@@ -518,22 +394,21 @@ library(modelsummary)
 msummary(m1, stars = TRUE)
 ```
 
-
 ## Conditional Conditional Means
 
-- The other bonus regression gives us is the ability to add *control variables*
+-   The other bonus regression gives us is the ability to add *control variables*
 
 $$ Y = \beta_0 + \beta_1X + \beta_2Z + \varepsilon $$
 
-- This gives us a "conditional conditional mean", i.e. "the conditional mean of $Y$ given $X$, conditional on $Z$ "
-- "What is the part of the relationship between $X$ and $Y$ that is not explained by differences in $Z$?"
+-   This gives us a "conditional conditional mean", i.e. "the conditional mean of $Y$ given $X$, conditional on $Z$"
+-   "What is the part of the relationship between $X$ and $Y$ that is not explained by differences in $Z$?"
 
 ## Conditional Conditional Means
 
-- Adding a control *removes the part of $X$ that is explained by $Z$* and also *removes the part of $Y$ that is explained by $Z$*
-- What's left over is the unrelated parts, and we can see how those unrelated parts relate
-- This is demonstrated most cleanly by the Frisch-Waugh-Lovell theorem
-- (this also extends to more than one control)
+-   Adding a control *removes the part of* $X$ that is explained by $Z$ and also *removes the part of* $Y$ that is explained by $Z$
+-   What's left over is the unrelated parts, and we can see how those unrelated parts relate
+-   This is demonstrated most cleanly by the Frisch-Waugh-Lovell theorem
+-   (this also extends to more than one control)
 
 ## Conditional Conditional Means
 
@@ -594,19 +469,19 @@ msummary(list(m4,m5,m6), vcov = 'robust', stars = TRUE)
 
 ## Interactions
 
-- We'll be using interactions a lot. They're very common in causal inference models, usually at least one of the interacted variables is binary (phew!)
-- Let's be sure we can interpret them properly!
-- Think about what coefficients are being multiplied by $X$ when $D = 0$ and when $D = 1$
-- And how much the effect of $X$ goes up by switching $D=0$ to $D = 1$!
+-   We'll be using interactions a lot. They're very common in causal inference models, usually at least one of the interacted variables is binary (phew!)
+-   Let's be sure we can interpret them properly!
+-   Think about what coefficients are being multiplied by $X$ when $D = 0$ and when $D = 1$
+-   And how much the effect of $X$ goes up by switching $D=0$ to $D = 1$!
 
 $$ Y = \beta_0 + \beta_1X + \beta_2D + \beta_3DX + \varepsilon $$
 
 ## Interactions
 
-- Coefficient on $X$ alone: effect of $X$ when $D = 0$
-- Coefficient on interaction alone: how much stronger the effect of $X$ is for $D = 1$ than for $D = 0$
-- $\beta_1 + \beta_3$: effect of $X$ when $D = 1$
-- With interactions (or polynomials), you need to consider *all the related coefficients at once*, not on their own
+-   Coefficient on $X$ alone: effect of $X$ when $D = 0$
+-   Coefficient on interaction alone: how much stronger the effect of $X$ is for $D = 1$ than for $D = 0$
+-   $\beta_1 + \beta_3$: effect of $X$ when $D = 1$
+-   With interactions (or polynomials), you need to consider *all the related coefficients at once*, not on their own
 
 ## Interactions
 
@@ -620,22 +495,22 @@ msummary(m5, stars = TRUE,
 
 ## Practice
 
-- Install (if you haven't) and load the packages **tidyverse, vtable, modelsummary, sandwich**
-- Load the `storms` data set with `data(storms)`
-- Use `sumtable` to look at the data. Pick a few numbers you see and use that number in a descriptive sentence (i.e. "the mean of the distribution of... is...")
+-   Install (if you haven't) and load the packages **tidyverse, vtable, modelsummary, sandwich**
+-   Load the `storms` data set with `data(storms)`
+-   Use `sumtable` to look at the data. Pick a few numbers you see and use that number in a descriptive sentence (i.e. "the mean of the distribution of... is...")
 
 ## Practice
 
-- Use `ggplot(storms, aes(x = SOMETHING))` `+ geom_density()` to look at the distribution of a numeric variable
-- Use `ggplot(storms, aes(x = SOMETHING))` `+ geom_bar()` to look at the distribution of a categorical variable
-- Use `mutate()` to create a variable `Hurricane = status == 'hurricane'`
-- Then...
+-   Use `ggplot(storms, aes(x = SOMETHING))` `+ geom_density()` to look at the distribution of a numeric variable
+-   Use `ggplot(storms, aes(x = SOMETHING))` `+ geom_bar()` to look at the distribution of a categorical variable
+-   Use `mutate()` to create a variable `Hurricane = status == 'hurricane'`
+-   Then...
 
 ## Practice
 
-- Run a regression of `pressure` on `year` and `Hurricane`, and then another with the interaction between them
-- Use `msummary()` to show both regressions on a table, with heteroskedasticity-robust SEs
-- Interpret each coefficient in the table in a sentence (including one of the intercepts!)
+-   Run a regression of `pressure` on `year` and `Hurricane`, and then another with the interaction between them
+-   Use `msummary()` to show both regressions on a table, with heteroskedasticity-robust SEs
+-   Interpret each coefficient in the table in a sentence (including one of the intercepts!)
 
 ## Practice Answers (for the code parts)
 
@@ -672,17 +547,16 @@ msummary(list(m1, m2), stars = TRUE, statistic_override = vcovHC,
 
 ```
 
-
 ## Practice Answers (interpretation!)
 
 Model 1:
 
-- If it's not a hurricane and it's in year 0, we predict pressure of 1294.063
-- Hurricanes have pressure 33.176 lower than non-hurricanes
-- Pressure drops by .146 each year
+-   If it's not a hurricane and it's in year 0, we predict pressure of 1294.063
+-   Hurricanes have pressure 33.176 lower than non-hurricanes
+-   Pressure drops by .146 each year
 
 Model 2:
 
-- Among non-hurricanes, pressure drops by .09 each year
-- In year 0, hurricanes have pressure 356.178 higher than non-hurricanes
-- Pressure drops by .195 *more* every year for hurricanes than non-hurricanes
+-   Among non-hurricanes, pressure drops by .09 each year
+-   In year 0, hurricanes have pressure 356.178 higher than non-hurricanes
+-   Pressure drops by .195 *more* every year for hurricanes than non-hurricanes
