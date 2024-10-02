@@ -1,13 +1,15 @@
 ---
 output:
   slidy_presentation:
-    self_contained: no
+    self_contained: false
     css: template.css
     includes:
       after_body: footer.html
+  beamer_presentation: default
+  ioslides_presentation: default
 ---
 
-<img src="logo.jpg" alt="University Logo" class="logo"/> <img src="uibk_header1.png" alt="University Header" class="header-image"/>
+<img src="universitaet-innsbruck-logo-cmyk-farbe.jpg" alt="University Logo" class="logo"/> <img src="uibk_header1.png" alt="University Header" class="header-image"/>
 
 <h1> Session 1 - Policy Evaluation <h1>
 
@@ -46,7 +48,7 @@ Fall 2023
 
 # Mean annual earnings of full-time workers in Austria 2017
 
-![Earnings Austria 2017](figures/earnings_austria_2017)  
+![Earnings Austria 2017](figures/earnings_austria_2017.png)  
 *Source: Statistik Austria, Statista 2022*
 
 ---
@@ -222,7 +224,7 @@ Impact evaluation estimates the benefit side, and cost analysis provides the cos
 
 # Results chain
 
-![Results chain](figures/results_chain)
+![Results chain](figures/results_chain.png)
 
 ---
 

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Lecture_07b_Causal_Concepts_Midterm_Review.knit</title>
+  <style type="text/css">
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+            pre > code.sourceCode { white-space: pre; position: relative; }
+            pre > code.sourceCode > span { line-height: 1.25; }
+            pre > code.sourceCode > span:empty { height: 1.2em; }
+            .sourceCode { overflow: visible; }
+            code.sourceCode > span { color: inherit; text-decoration: inherit; }
+            div.sourceCode { margin: 1em 0; }
+            pre.sourceCode { margin: 0; }
+            @media screen {
+            div.sourceCode { overflow: auto; }
+            }
+            @media print {
+            pre > code.sourceCode { white-space: pre-wrap; }
+            pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+            }
+            pre.numberSource code
+              { counter-reset: source-line 0; }
+            pre.numberSource code > span
+              { position: relative; left: -4em; counter-increment: source-line; }
+            pre.numberSource code > span > a:first-child::before
+              { content: counter(source-line);
+                position: relative; left: -1em; text-align: right; vertical-align: baseline;
+                border: none; display: inline-block;
+                -webkit-touch-callout: none; -webkit-user-select: none;
+                -khtml-user-select: none; -moz-user-select: none;
+                -ms-user-select: none; user-select: none;
+                padding: 0 4px; width: 4em;
+                color: #aaaaaa;
+              }
+            pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+            div.sourceCode
+              {   }
+            @media screen {
+            pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+            }
+            code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+            code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+            code span.at { color: #7d9029; } /* Attribute */
+            code span.bn { color: #40a070; } /* BaseN */
+            code span.bu { color: #008000; } /* BuiltIn */
+            code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+            code span.ch { color: #4070a0; } /* Char */
+            code span.cn { color: #880000; } /* Constant */
+            code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+            code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+            code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+            code span.dt { color: #902000; } /* DataType */
+            code span.dv { color: #40a070; } /* DecVal */
+            code span.er { color: #ff0000; font-weight: bold; } /* Error */
+            code span.ex { } /* Extension */
+            code span.fl { color: #40a070; } /* Float */
+            code span.fu { color: #06287e; } /* Function */
+            code span.im { color: #008000; font-weight: bold; } /* Import */
+            code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+            code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+            code span.op { color: #666666; } /* Operator */
+            code span.ot { color: #007020; } /* Other */
+            code span.pp { color: #bc7a00; } /* Preprocessor */
+            code span.sc { color: #4070a0; } /* SpecialChar */
+            code span.ss { color: #bb6688; } /* SpecialString */
+            code span.st { color: #4070a0; } /* String */
+            code span.va { color: #19177c; } /* Variable */
+            code span.vs { color: #4070a0; } /* VerbatimString */
+            code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+          </style>
+  <style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <script src="Lecture_07b_Causal_Concepts_Midterm_Review_files/header-attrs-2.28/header-attrs.js"></script>
+  <link href="Lecture_07b_Causal_Concepts_Midterm_Review_files/slidy-2/styles/slidy.css" rel="stylesheet" />
+  <script src="Lecture_07b_Causal_Concepts_Midterm_Review_files/slidy-2/scripts/slidy.js"></script>
+  <script src="Lecture_07b_Causal_Concepts_Midterm_Review_files/slidy_shiny-1/slidy_shiny.js"></script>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="template.css" />
+</head>
+<body>
+<div class="slide section level2">
+
+<p><img src="logo.jpg" alt="University Logo" class="logo"/>
+<img src="uibk_header1.png" alt="University Header" class="header-image"/></p>
+<h1>
+Lecture 7b: Causal Concepts Midterm Review
+</h1>
+</div>
+<div id="exam-review" class="slide section level2">
+<h1>Exam Review</h1>
+<ul>
+<li>Just some reminders of stuff we have covered</li>
+</ul>
+</div>
+<div id="describing-variables" class="slide section level2">
+<h1>Describing Variables</h1>
+<ul>
+<li>Continuous and Discrete Distributions</li>
+<li>Summary statistics - mean, percentiles, skew</li>
+<li>Theoretical distributions and our attempts to learn about them from
+data</li>
+<li>Sampling variation messing up our ability to do so</li>
+</ul>
+</div>
+<div id="describing-relationships" class="slide section level2">
+<h1>Describing Relationships</h1>
+<ul>
+<li>Conditional means</li>
+<li>Explaining one variable with another</li>
+<li>Conditional distributions, contrasting distributions,
+scatterplots</li>
+<li>Local means, fitting shapes with regressions, adding controls for
+conditional conditional means</li>
+<li>Interaction terms</li>
+</ul>
+</div>
+<div id="identification" class="slide section level2">
+<h1>Identification</h1>
+<ul>
+<li>We are isolating the variation we are interested in</li>
+<li>That’s the “good variation”</li>
+<li>Bad variation can get in the way</li>
+<li>We need a model of how the world works to figure out what the bad
+variation is so we can sweep it out</li>
+</ul>
+</div>
+<div id="causal-diagrams" class="slide section level2">
+<h1>Causal Diagrams</h1>
+<ol style="list-style-type: decimal">
+<li>Consider all the variables that are likely to be important in the
+data generating process (this includes variables you can’t observe)</li>
+<li>For simplicity, combine them together or prune the ones least likely
+to be important</li>
+<li>Consider which variables are likely to affect which other variables
+and draw arrows from one to the other</li>
+<li>(Bonus: Test some implications of the model to see if you have the
+right one)</li>
+</ol>
+</div>
+<div id="causal-diagrams-1" class="slide section level2">
+<h1>Causal Diagrams</h1>
+<p>Identifying <code>X -&gt; Y</code> by closing back doors:</p>
+<ol style="list-style-type: decimal">
+<li>Find all the paths from <code>X</code> to <code>Y</code> on the
+diagram</li>
+<li>Determine which are “front doors” (start with <code>X -&gt;</code>)
+and which are “back doors” (start with <code>X &lt;-</code>)</li>
+<li>Determine which are already closed by colliders
+(<code>X -&gt; C &lt;- Y</code>)</li>
+<li>Then, identify the effect by finding which variables you need to
+control for to close all back doors (careful - don’t close the front
+doors, or open back up paths with colliders!)</li>
+</ol>
+</div>
+<div id="controlling" class="slide section level2">
+<h1>Controlling</h1>
+<ul>
+<li>One way to close back doors is by controlling</li>
+<li>Control for <code>W</code> by seeing what <code>W</code> explains
+(perhaps with a regression) and taking it out</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(Ecdat)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">data</span>(BudgetFood)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>BudgetFood <span class="ot">&lt;-</span> BudgetFood <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">totexp =</span> totexp<span class="sc">/</span><span class="dv">1000000</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wfood <span class="sc">~</span> totexp, <span class="at">data =</span> BudgetFood)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wfood_r <span class="sc">~</span> totexp_r, <span class="at">data =</span> BudgetFood <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">wfood_r =</span> <span class="fu">resid</span>(<span class="fu">lm</span>(wfood<span class="sc">~</span>age)),</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>                                                          <span class="at">totexp_r =</span> <span class="fu">resid</span>(<span class="fu">lm</span>(totexp<span class="sc">~</span>age))))</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wfood <span class="sc">~</span> totexp <span class="sc">+</span> age, <span class="at">data =</span> BudgetFood)</span></code></pre></div>
+</div>
+<div id="controlling-1" class="slide section level2">
+<h1>Controlling</h1>
+<table style="width:69%;">
+<colgroup>
+<col width="19%" />
+<col width="16%" />
+<col width="16%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><ol style="list-style-type: decimal">
+<li></li>
+</ol></th>
+<th><ol start="2" style="list-style-type: decimal">
+<li></li>
+</ol></th>
+<th><ol start="3" style="list-style-type: decimal">
+<li></li>
+</ol></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(Intercept)</td>
+<td>0.495***</td>
+<td>0.000</td>
+<td>0.406***</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(0.002)</td>
+<td>(0.001)</td>
+<td>(0.004)</td>
+</tr>
+<tr class="odd">
+<td>totexp</td>
+<td>-0.135***</td>
+<td></td>
+<td>-0.125***</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>(0.001)</td>
+<td></td>
+<td>(0.001)</td>
+</tr>
+<tr class="odd">
+<td>totexp_r</td>
+<td></td>
+<td>-0.125***</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>(0.001)</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>age</td>
+<td></td>
+<td></td>
+<td>0.002***</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td></td>
+<td>(0.000)</td>
+</tr>
+<tr class="odd">
+<td>Num.Obs.</td>
+<td>23972</td>
+<td>23972</td>
+<td>23972</td>
+</tr>
+<tr class="even">
+<td>R2</td>
+<td>0.263</td>
+<td>0.228</td>
+<td>0.282</td>
+</tr>
+<tr class="odd">
+<td>RMSE</td>
+<td>0.14</td>
+<td>0.14</td>
+<td>0.14</td>
+</tr>
+</tbody><tfoot>
+<tr class="odd">
+<td colspan="4"><ul>
+<li>p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</li>
+</ul></td>
+</tr>
+</tfoot>
+
+</table>
+</div>
+<div class="footer">
+  <div class="footer-left">
+    <img src="logo.jpg" class="footer-logo-image">
+  </div>
+  <div class="footer-center">
+   Andreas Steinmayr
+  </div>
+  <div class="footer-right">
+    <span class="course-number">404050 VU/3VU Empirical Economics </span>
+  </div>
+</div>
+
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,625 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\begin{frame}
+
+Lecture 3: Causality
+\end{frame}
+
+\begin{frame}{Causality}
+\phantomsection\label{causality}
+We want to know ``Does X cause Y?'' and ``How much does X cause Y?'' We
+often want to do this while only having access to observational data
+This is what the class is about
+\end{frame}
+
+\begin{frame}{Why Causality?}
+\phantomsection\label{why-causality}
+\begin{itemize}
+\tightlist
+\item
+  Many of the interesting questions we might want to answer with data
+  are causal
+\item
+  Some are non-causal, too - for example, ``how can we predict whether
+  this photo is of a dog or a cat'' is vital to how Google Images works,
+  but it doesn't care what \emph{caused} the photo to be of a dog or a
+  cat
+\item
+  Nearly every \emph{why} question is causal
+\item
+  And when we're talking about people, \emph{why} is often what we want
+  to know!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Also}
+\phantomsection\label{also}
+\begin{itemize}
+\tightlist
+\item
+  This is economists' comparative advantage!
+\item
+  Plenty of fields do statistics. But very few make it standard training
+  for their students to understand causality
+\item
+  This understanding of causality makes economists very useful!
+  \emph{This} is one big reason why tech companies have whole economics
+  departments in them
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bringing us to\ldots{}}
+\phantomsection\label{bringing-us-to}
+\begin{itemize}
+\tightlist
+\item
+  Part of this half of the class will be understanding what causality
+  \emph{is} and how we can find it
+\item
+  Another big part will be understanding common \emph{research designs}
+  for uncovering causality in data when we can't do an experiment
+\item
+  These, more than supply \& demand, more than ISLM, are the tools of
+  the modern economist!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{So what is causality?}
+\phantomsection\label{so-what-is-causality}
+\begin{itemize}
+\tightlist
+\item
+  We say that \texttt{X} \emph{causes} \texttt{Y} if\ldots{}
+\item
+  were we to intervene and \emph{change} the value of \texttt{X} without
+  changing anything else\ldots{}
+\item
+  then \texttt{Y} would also change as a result
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Some examples}
+\phantomsection\label{some-examples}
+Examples of causal relationships!
+
+Some obvious:
+
+\begin{itemize}
+\tightlist
+\item
+  A light switch being set to on causes the light to be on
+\item
+  Setting off fireworks raises the noise level
+\end{itemize}
+
+Some less obvious:
+
+\begin{itemize}
+\tightlist
+\item
+  Getting a college degree increases your earnings
+\item
+  Tariffs reduce the amount of trade
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Some examples}
+\phantomsection\label{some-examples-1}
+Examples of non-zero \emph{correlations} that are not \emph{causal} (or
+may be causal in the wrong direction!)
+
+Some obvious:
+
+\begin{itemize}
+\tightlist
+\item
+  People tend to wear shorts on days when ice cream trucks are out
+\item
+  Rooster crowing sounds are followed closely by sunrise*
+\end{itemize}
+
+Some less obvious:
+
+\begin{itemize}
+\tightlist
+\item
+  Colds tend to clear up a few days after you take Emergen-C
+\item
+  The performance of the economy tends to be lower or higher depending
+  on the president's political party
+\end{itemize}
+
+*This case of mistaken causality is the basis of the film Rock-a-Doodle
+which I remember being very entertaining when I was six.
+\end{frame}
+
+\begin{frame}{Important Note}
+\phantomsection\label{important-note}
+\begin{itemize}
+\tightlist
+\item
+  ``X causes Y'' \emph{doesn't} mean that X is necessarily the
+  \emph{only} thing that causes Y
+\item
+  And it \emph{doesn't} mean that all Y must be X
+\item
+  For example, using a light switch causes the light to go on
+\item
+  But not if the bulb is burned out (no Y, despite X), or if the light
+  was already on (Y without X), and it ALSO needs electicity (something
+  else causes Y)
+\item
+  But still we'd say that using the switch causes the light! The
+  important thing is that X \emph{changes the distribution} of Y, not
+  that it necessarily makes it happen for certain
+\end{itemize}
+\end{frame}
+
+\begin{frame}{So How Can We Tell?}
+\phantomsection\label{so-how-can-we-tell}
+\begin{itemize}
+\tightlist
+\item
+  As just shown, there are plenty of \emph{correlations} that aren't
+  \emph{causal}
+\item
+  So if we have a correlation, how can we tell if it \emph{is}?
+\item
+  For this we're going to have to think hard about \emph{causal
+  inference}. That is, inferring causality from data
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Problem of Causal Inference}
+\phantomsection\label{the-problem-of-causal-inference}
+\begin{itemize}
+\tightlist
+\item
+  Let's try to think about whether some \texttt{X} causes \texttt{Y}
+\item
+  That is, if we manipulated \texttt{X}, then \texttt{Y} would change as
+  a result
+\item
+  For simplicity, let's assume that \texttt{X} is either 1 or 0, like
+  ``got a medical treatment'' or ``didn't''
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Problem of Causal Inference}
+\phantomsection\label{the-problem-of-causal-inference-1}
+\begin{itemize}
+\tightlist
+\item
+  Now, how can we know \emph{what would happen} if we manipulated
+  \texttt{X}?
+\item
+  Let's consider just one person - Angela. We could just check what
+  Angela's \texttt{Y} is when we make \texttt{X=0}, and then check what
+  Angela's \texttt{Y} is again when we make \texttt{X=1}.
+\item
+  Are those two \texttt{Y}s different? If so, \texttt{X} causes
+  \texttt{Y}!
+\item
+  Do that same process for everyone in your sample and you know in
+  general what the effect of \texttt{X} on \texttt{Y} is
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Problem of Causal Inference}
+\phantomsection\label{the-problem-of-causal-inference-2}
+\begin{itemize}
+\tightlist
+\item
+  You may have spotted the problem
+\item
+  Just like you can't be in two places at once, Angela can't exist both
+  with \texttt{X=0} and with \texttt{X=1}. She either got that medical
+  treatment or she didn't.
+\item
+  Let's say she did. So for Angela, \texttt{X=1} and, let's say,
+  \texttt{Y=10}.
+\item
+  The other one, what \texttt{Y} \emph{would have been} if we made
+  \texttt{X=0}, is \emph{missing}. We don't know what it is! Could also
+  be \texttt{Y=10}. Could be \texttt{Y=9}. Could be \texttt{Y=1000}!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Problem of Causal Inference}
+\phantomsection\label{the-problem-of-causal-inference-3}
+\begin{itemize}
+\tightlist
+\item
+  Well, why don't we just take someone who actually DOES have
+  \texttt{X=0} and compare their \texttt{Y}?
+\item
+  Because there are lots of reasons their \texttt{Y} could be different
+  BESIDES \texttt{X}.
+\item
+  They're not Angela! A character flaw to be sure.
+\item
+  So if we find someone, Gareth, with \texttt{X=0} and they have
+  \texttt{Y=9}, is that because \texttt{X} increases \texttt{Y}, or is
+  that just because Angela and Gareth would have had different
+  \texttt{Y}s anyway?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Problem of Causal Inference}
+\phantomsection\label{the-problem-of-causal-inference-4}
+\begin{itemize}
+\tightlist
+\item
+  The main goal we have in doing causal inference is in making \emph{as
+  good a guess as possible} as to what that \texttt{Y} \emph{would have
+  been} if \texttt{X} had been different
+\item
+  That ``would have been'' is called a \emph{counterfactual} - counter
+  to the fact of what actually happened
+\item
+  In doing so, we want to think about two people/firms/countries that
+  are basically \emph{exactly the same} except that one has \texttt{X=0}
+  and one has \texttt{X=1}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Potential Outcomes}
+\phantomsection\label{potential-outcomes}
+\begin{itemize}
+\tightlist
+\item
+  The logic we just went through is the basis of the \emph{potential
+  outcomes model}, which is one way of thinking about causality
+\item
+  It's not the only one, or the one we'll be mainly using, but it helps!
+\item
+  We can't observe the counterfactual, and must make an estimate of what
+  the \emph{outcome} would \emph{potentially} have been under the
+  counterfactual
+\item
+  Figuring out that makes a good counterfactual estimate is a key part
+  of causal inference!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Experiments}
+\phantomsection\label{experiments}
+\begin{itemize}
+\tightlist
+\item
+  A common way to do causal inference in many fields is an
+  \emph{experiment}
+\item
+  If you can \emph{randomly assign} \texttt{X}, then you know that the
+  people with \texttt{X=0} are, on average, exactly the same as the
+  people with \texttt{X=1}
+\item
+  So that's an easy comparison!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Experiments}
+\phantomsection\label{experiments-1}
+\begin{itemize}
+\tightlist
+\item
+  When we're working with people/firms/countries, running experiments is
+  often infeasible, impossible, or unethical
+\item
+  So we have to think hard about a \emph{model} of what the world looks
+  like
+\item
+  So that we can use our model to figure out what the
+  \emph{counterfactual} would be
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Models}
+\phantomsection\label{models}
+\begin{itemize}
+\tightlist
+\item
+  In causal inference, the \emph{model} is our idea of what we think the
+  process is that \emph{generated the data}
+\item
+  We have to make some assumptions about what this is!
+\item
+  We put together what we know about the world with assumptions and end
+  up with our model
+\item
+  The model can then tell us what kinds of things could give us wrong
+  results so we can fix them and get the right counterfactual
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Models}
+\phantomsection\label{models-1}
+\begin{itemize}
+\tightlist
+\item
+  Wouldn't it be nice to not have to make assumptions?
+\item
+  Yeah, but it's impossible to skip!
+\item
+  We're trying to predict something that hasn't happened - a
+  counterfactual
+\item
+  This is literally impossible to do if you don't have some model of how
+  the data is generated
+\item
+  You can't even predict the sun will rise tomorrow without a model!
+\item
+  If you think you can, you're just don't realize the model you're using
+  - that's dangerous!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{An Example}
+\phantomsection\label{an-example}
+\begin{itemize}
+\tightlist
+\item
+  Let's cheat again and know how our data is generated!
+\item
+  Let's say that getting \texttt{X} causes \texttt{Y} to increase by 1
+\item
+  And let's run a randomized experiment of who actually gets X
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Y.without.X =} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{1000}\NormalTok{),}\AttributeTok{X=}\FunctionTok{sample}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{),}\DecValTok{1000}\NormalTok{,}\AttributeTok{replace=}\NormalTok{T)) }\SpecialCharTok{\%\textgreater{}\%}
+\FunctionTok{mutate}\NormalTok{(}\AttributeTok{Y.with.X =}\NormalTok{ Y.without.X }\SpecialCharTok{+} \DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\CommentTok{\#Now assign who actually gets X}
+\FunctionTok{mutate}\NormalTok{(}\AttributeTok{Observed.Y =} \FunctionTok{ifelse}\NormalTok{(X}\SpecialCharTok{==}\DecValTok{1}\NormalTok{,Y.with.X,Y.without.X))}
+\CommentTok{\#And see what effect our experiment suggests X has on Y}
+\NormalTok{df }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(X) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{summarize}\NormalTok{(}\AttributeTok{Y =} \FunctionTok{mean}\NormalTok{(Observed.Y))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##       X      Y
+##   <dbl>  <dbl>
+## 1     0 0.0349
+## 2     1 0.955
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{An Example}
+\phantomsection\label{an-example-1}
+\begin{itemize}
+\tightlist
+\item
+  Now this time we can't randomize X.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Z =} \FunctionTok{runif}\NormalTok{(}\DecValTok{10000}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Y.without.X =} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{10000}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ Z, }\AttributeTok{Y.with.X =}\NormalTok{ Y.without.X }\SpecialCharTok{+} \DecValTok{1}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \CommentTok{\#Now assign who actually gets X}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{X =}\NormalTok{ Z }\SpecialCharTok{\textgreater{}}\NormalTok{ .}\DecValTok{7}\NormalTok{,}\AttributeTok{Observed.Y =} \FunctionTok{ifelse}\NormalTok{(X}\SpecialCharTok{==}\DecValTok{1}\NormalTok{,Y.with.X,Y.without.X))}
+\NormalTok{df }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(X) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{summarize}\NormalTok{(}\AttributeTok{Y =} \FunctionTok{mean}\NormalTok{(Observed.Y))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   X         Y
+##   <lgl> <dbl>
+## 1 FALSE 0.357
+## 2 TRUE  1.83
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#But if we properly model the process and compare apples to apples...}
+\NormalTok{df }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(}\FunctionTok{abs}\NormalTok{(Z}\FloatTok{{-}.7}\NormalTok{)}\SpecialCharTok{\textless{}}\NormalTok{.}\DecValTok{01}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(X) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{summarize}\NormalTok{(}\AttributeTok{Y =} \FunctionTok{mean}\NormalTok{(Observed.Y))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   X         Y
+##   <lgl> <dbl>
+## 1 FALSE 0.641
+## 2 TRUE  1.70
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Identification}
+\phantomsection\label{identification}
+\begin{itemize}
+\tightlist
+\item
+  We have ``identified'' a causal effect if \emph{the estimate that we
+  generate gives us a causal effect}
+\item
+  In other words, \textbf{when we see the estimate, we can claim that
+  it's isolating just the causal effect}
+\item
+  Simply looking at \texttt{lm(Y\textasciitilde{}X)} gives us the causal
+  effect in the randomized-X case. \texttt{lm(Y\textasciitilde{}X)}
+  \textbf{identifies} the effect of \(X\) on \(Y\)
+\item
+  But \texttt{lm(Y\textasciitilde{}X)} does \emph{not} give us the
+  causal effect in the non-randomized case we did. In that case,
+  \texttt{lm(Y\textasciitilde{}X)} does not \textbf{identify} the causal
+  effect, but the apples-to-apples comparison we did \emph{does}
+  identify the effect
+\item
+  Causal inference is all about figuring out \textbf{what calculation we
+  need to do to identify that effect}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Identification}
+\phantomsection\label{identification-1}
+\begin{itemize}
+\tightlist
+\item
+  Identifying effects requires us to understand the \textbf{data
+  generating process} (DGP)
+\item
+  And once we understand that DGP, knowing what calculations we need to
+  do to isolate our effect
+\item
+  Often these will require taking some conditional values (controls)
+\item
+  Or \textbf{isolating the variation we want} in some othe rway
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{So!}
+\phantomsection\label{so}
+\begin{itemize}
+\tightlist
+\item
+  So, as we move forward\ldots{}
+\item
+  We're going to be thinking about how to create models of the processes
+  that generated the data
+\item
+  And, once we have those models, we'll figure out what methods we can
+  use to generate plausible counterfactuals
+\item
+  Once we're really comparing apples to apples, we can figure out, using
+  \emph{only data we can actually observe}, how things would be
+  different if we reached in and changed \texttt{X}, and how \texttt{Y}
+  would change as a result.
+\end{itemize}
+\end{frame}
+
+\end{document}

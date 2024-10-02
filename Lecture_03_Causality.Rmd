@@ -1,7 +1,8 @@
 ---
 output:
+  beamer_presentation: default
   slidy_presentation:
-    self_contained: no
+    self_contained: false
     css: template.css
     includes:
       after_body: footer.html

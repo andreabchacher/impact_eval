@@ -1,0 +1,19 @@
+Outline for new policy evaluation course
+
+11 lectures (one of them for the exam and discussion of empirical )
+
+1. start with 3ie book policy evaluation              October 2
+2. Research design and research questions (1 + 2)     October 9
+3. Identification (5)                                 October 16
+  -- maybe add some potential outcomes here
+4. Causal diagrams (6 + 7 + 8 + 9)                    October 23
+
+5. Regression (13)                                    October 30
+  -- add talk about RCTs
+6. Difference-in-Differences (18)                     November 6
+7. Instrumental variables (19)                        November 13
+8. RDD (20)                                           November 20
+
+
+
+Describing variables and describing relationships (3 + 4) take home reading
